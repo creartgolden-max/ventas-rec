@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ventas — Recouromex</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#222}
+header{background:#1a1a2e;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px}
+header h1{font-size:1.2rem;font-weight:700}
+.badge{background:#e94560;color:#fff;font-size:.7rem;padding:2px 8px;border-radius:12px}
+#login-screen{display:flex;justify-content:center;align-items:center;min-height:90vh}
+.login-box{background:#fff;border-radius:12px;padding:40px;box-shadow:0 4px 20px rgba(0,0,0,.1);width:320px;text-align:center}
+.login-box h2{margin-bottom:24px;color:#1a1a2e}
+.pin-input{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
+.pin-input input{width:44px;height:52px;font-size:1.4rem;text-align:center;border:2px solid #ddd;border-radius:8px;outline:none}
+.pin-input input:focus{border-color:#e94560}
+.btn-primary{background:#e94560;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:1rem;cursor:pointer;width:100%}
+.btn-primary:hover{background:#c73652}
+.error-msg{color:#e94560;font-size:.85rem;margin-top:8px;min-height:20px}
+#app{display:none}
+.topbar{background:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e0e0e0}
+.topbar .user-info{font-size:.9rem;color:#555}
+.btn-logout{background:none;border:1px solid #ccc;padding:5px 14px;border-radius:6px;cursor:pointer;font-size:.85rem}
+.tabs{display:flex;background:#fff;border-bottom:2px solid #e0e0e0;padding:0 20px}
+.tab{padding:12px 24px;cursor:pointer;font-weight:600;color:#888;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab.active{color:#e94560;border-bottom-color:#e94560}
+.tab-content{display:none;padding:20px}
+.tab-content.active{display:block}
+.card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px}
+.card h3{font-size:1rem;color:#1a1a2e;margin-bottom:14px}
+.periodo-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.periodo-row label{font-size:.85rem;color:#666}
+.periodo-row input[type=month]{border:1px solid #ddd;border-radius:6px;padding:6px 10px;font-size:.9rem}
+.vendor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.vendor-card{border:1px solid #e0e0e0;border-radius:8px;padding:14px}
+.vendor-card label{font-weight:600;font-size:.9rem;display:block;margin-bottom:8px;color:#333}
+.vendor-card .input-monto{width:100%;border:1px solid #ddd;border-radius:6px;padding:8px 10px;font-size:1rem;text-align:right}
+.vendor-card .input-monto:focus{outline:none;border-color:#e94560}
+.vendor-card .save-status{font-size:.75rem;color:#aaa;margin-top:4px;min-height:16px}
+.marca-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.marca-table th{text-align:left;padding:8px 10px;background:#f8f8f8;border-bottom:2px solid #eee;color:#555;font-weight:600}
+.marca-table td{padding:10px;border-bottom:1px solid #f0f0f0}
+.marca-table input{width:100%;border:1px solid #ddd;border-radius:6px;padding:6px 8px;font-size:.9rem;text-align:right}
+.marca-table input:focus{outline:none;border-color:#e94560}
+.marca-table .status-cell{font-size:.75rem;color:#aaa}
+.btn-save-all{background:#1a1a2e;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;margin-top:12px}
+.btn-save-all:hover{background:#2d2d4e}
+.meta-section{border-top:1px solid #eee;margin-top:16px;padding-top:14px}
+.meta-section h4{font-size:.85rem;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
+.meta-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.meta-row label{min-width:160px;font-size:.9rem}
+.meta-row input{width:140px;border:1px solid #ddd;border-radius:6px;padding:6px 8px;font-size:.9rem;text-align:right}
+.btn-save-meta{background:#4caf50;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.85rem}
+.meta-status{font-size:.75rem;color:#aaa}
+.loading{text-align:center;padding:30px;color:#aaa}
+</style>
+</head>
+<body>
+<header>
+  <h1>Ventas Recouromex</h1>
+  <span class="badge" id="header-rol"></span>
+</header>
+<div id="login-screen">
+  <div class="login-box">
+    <h2>Acceso</h2>
+    <p style="color:#888;font-size:.85rem;margin-bottom:20px;">Ingresa tu PIN de 4 digitos</p>
+    <div class="pin-input">
+      <input type="password" maxlength="1" id="p0" inputmode="numeric">
+      <input type="password" maxlength="1" id="p1" inputmode="numeric">
+      <input type="password" maxlength="1" id="p2" inputmode="numeric">
+      <input type="password" maxlength="1" id="p3" inputmode="numeric">
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Entrar</button>
+    <div class="error-msg" id="login-error"></div>
+  </div>
+</div>
+<div id="app">
+  <div class="topbar">
+    <span class="user-info">Hola <strong id="user-nombre"></strong> &mdash; <span id="user-rol"></span></span>
+    <button class="btn-logout" onclick="doLogout()">Salir</button>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab(0)">Ventas por Vendedor</div>
+    <div class="tab" onclick="switchTab(1)">Ventas por Marca</div>
+  </div>
+  <div class="tab-content active" id="tab0">
+    <div class="card">
+      <h3>Periodo</h3>
+      <div class="periodo-row">
+        <label>Mes:</label>
+        <input type="month" id="periodo-vend" onchange="loadVendedores()">
+      </div>
+      <div class="vendor-grid" id="vendor-grid"><div class="loading">Cargando...</div></div>
+      <button class="btn-save-all" onclick="saveAllVendedores()">Guardar todo</button>
+      <div id="vend-global-status" style="font-size:.8rem;color:#888;margin-top:6px;"></div>
+    </div>
+  </div>
+  <div class="tab-content" id="tab1">
+    <div class="card">
+      <h3>Periodo</h3>
+      <div class="periodo-row">
+        <label>Mes:</label>
+        <input type="month" id="periodo-marca" onchange="loadMarcas()">
+      </div>
+      <table class="marca-table">
+        <thead><tr><th>Marca</th><th>Venta Real</th><th>Anio Anterior</th><th>Meta</th><th>% Meta</th><th>Estado</th></tr></thead>
+        <tbody id="marca-tbody"><tr><td colspan="6" class="loading">Cargando...</td></tr></tbody>
+      </table>
+      <button class="btn-save-all" onclick="saveAllMarcas()">Guardar todo</button>
+      <div id="marca-global-status" style="font-size:.8rem;color:#888;margin-top:6px;"></div>
+      <div class="meta-section" id="meta-section" style="display:none;">
+        <h4>Editar Metas Mensuales</h4>
+        <div id="meta-rows"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var SUPA_URL='https://qcwpnovwyhzhqqmhjxco.supabase.co';
+var SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjd3Bub3Z3eWh6aHFxbWhqeGNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDA3OTUsImV4cCI6MjA5NTI3Njc5NX0.-MSnn07PdxstQ90OLf16823Nvihr47ePXoQSFvgC3mU';
+var SESSION=null,VENDEDORES=[],MARCAS=[];
+function rpc(fn,p){return fetch(SUPA_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'},body:JSON.stringify(p)}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.message||JSON.stringify(d));return d;});});}
+function sel(t,q){return fetch(SUPA_URL+'/rest/v1/'+t+'?order=orden&'+(q||''),{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}}).then(function(r){return r.json();});}
+['p0','p1','p2','p3'].forEach(function(id,i){
+  document.getElementById(id).addEventListener('input',function(e){if(e.target.value.length===1&&i<3)document.getElementById('p'+(i+1)).focus();if(i===3)doLogin();});
+  document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Backspace'&&e.target.value===''&&i>0)document.getElementById('p'+(i-1)).focus();});
+});
+function doLogin(){
+  var pin=['p0','p1','p2','p3'].map(function(id){return document.getElementById(id).value;}).join('');
+  if(pin.length<4)return;
+  rpc('vta_check_pin',{p_pin:pin}).then(function(evalId){
+    if(!evalId){showError('PIN incorrecto');return;}
+    sel('vta_evaluadores_publico','id=eq.'+evalId).then(function(rows){
+      var ev=rows[0];
+      SESSION={pin:pin,id:evalId,nombre:ev.nombre,rol:ev.rol};
+      showApp();
+    });
+  }).catch(function(e){showError('Error: '+e.message);});
+}
+function showError(msg){
+  document.getElementById('login-error').textContent=msg;
+  ['p0','p1','p2','p3'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('p0').focus();
+}
+function showApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('user-nombre').textContent=SESSION.nombre;
+  document.getElementById('user-rol').textContent=SESSION.rol;
+  document.getElementById('header-rol').textContent=SESSION.rol;
+  var now=new Date();
+  var ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  document.getElementById('periodo-vend').value=ym;
+  document.getElementById('periodo-marca').value=ym;
+  if(SESSION.rol==='Direccion')document.getElementById('meta-section').style.display='block';
+  loadVendedores();loadMarcas();
+}
+function doLogout(){
+  SESSION=null;
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  ['p0','p1','p2','p3'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('p0').focus();
+}
+function switchTab(n){
+  document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',i===n);});
+  document.querySelectorAll('.tab-content').forEach(function(c,i){c.classList.toggle('active',i===n);});
+}
+function loadVendedores(){
+  var periodo=document.getElementById('periodo-vend').value;
+  if(!periodo)return;
+  document.getElementById('vendor-grid').innerHTML='<div class="loading">Cargando...</div>';
+  sel('vta_vendedores','activo=eq.true').then(function(vs){
+    VENDEDORES=vs;
+    sel('vta_ventas_vendedor','periodo=eq.'+periodo).then(function(ventas){
+      var vm={};ventas.forEach(function(v){vm[v.vendedor_id]=v.monto;});
+      var grid=document.getElementById('vendor-grid');grid.innerHTML='';
+      VENDEDORES.forEach(function(v){
+        var div=document.createElement('div');div.className='vendor-card';
+        div.innerHTML='<label>'+v.nombre+'</label><input class="input-monto" type="number" min="0" step="0.01" id="monto-'+v.id+'" value="'+(vm[v.id]!==undefined?vm[v.id]:'')+'" placeholder="0.00"><div class="save-status" id="status-'+v.id+'"></div>';
+        grid.appendChild(div);
+      });
+    });
+  });
+}
+function saveAllVendedores(){
+  var periodo=document.getElementById('periodo-vend').value;
+  if(!periodo||!SESSION)return;
+  var ok=0,fail=0,total=VENDEDORES.length,done=0;
+  document.getElementById('vend-global-status').textContent='Guardando...';
+  VENDEDORES.forEach(function(v){
+    var val=document.getElementById('monto-'+v.id).value;
+    var monto=val===''?null:parseFloat(val);
+    rpc('vta_upsert_vendedor',{p_pin:SESSION.pin,p_vendedor:v.id,p_periodo:periodo,p_monto:monto}).then(function(){
+      document.getElementById('status-'+v.id).textContent='OK';ok++;done++;
+      if(done===total)document.getElementById('vend-global-status').textContent=ok+' guardados'+(fail?' | '+fail+' errores':'');
+    }).catch(function(){
+      document.getElementById('status-'+v.id).textContent='Error';fail++;done++;
+      if(done===total)document.getElementById('vend-global-status').textContent=ok+' guardados | '+fail+' errores';
+    });
+  });
+}
+function loadMarcas(){
+  var periodo=document.getElementById('periodo-marca').value;
+  if(!periodo)return;
+  document.getElementById('marca-tbody').innerHTML='<tr><td colspan="6" class="loading">Cargando...</td></tr>';
+  sel('vta_marcas','activo=eq.true').then(function(ms){
+    MARCAS=ms;
+    sel('vta_ventas_marca','periodo=eq.'+periodo).then(function(ventas){
+      var vm={};ventas.forEach(function(v){vm[v.marca_id]=v;});
+      var tbody=document.getElementById('marca-tbody');tbody.innerHTML='';
+      MARCAS.forEach(function(m){
+        var row=vm[m.id];
+        var real=row&&row.venta_real!==null?row.venta_real:'';
+        var ant=row&&row.venta_anio_anterior!==null?row.venta_anio_anterior:'';
+        var meta=m.meta_mensual||0;
+        var pct=real!==''&&meta>0?((parseFloat(real)/meta)*100).toFixed(1)+'%':'--';
+        var pctColor=pct!='--'?(parseFloat(pct)>=100?'#4caf50':parseFloat(pct)>=80?'#ff9800':'#e94560'):'#888';
+        var tr=document.createElement('tr');
+        tr.innerHTML='<td><strong>'+m.nombre+'</strong></td><td><input type="number" min="0" step="0.01" id="mr-'+m.id+'" value="'+real+'" placeholder="0.00"></td><td><input type="number" min="0" step="0.01" id="ma-'+m.id+'" value="'+ant+'" placeholder="0.00"></td><td style="text-align:right;color:#888">'+(meta>0?'$'+meta.toLocaleString():'--')+'</td><td style="text-align:center;font-weight:600;color:'+pctColor+'">'+pct+'</td><td class="status-cell" id="ms-'+m.id+'"></td>';
+        tbody.appendChild(tr);
+      });
+      if(SESSION&&SESSION.rol==='Direccion')renderMetaRows();
+    });
+  });
+}
+function renderMetaRows(){
+  var div=document.getElementById('meta-rows');div.innerHTML='';
+  MARCAS.forEach(function(m){
+    var row=document.createElement('div');row.className='meta-row';
+    row.innerHTML='<label>'+m.nombre+'</label><input type="number" min="0" step="1" id="meta-'+m.id+'" value="'+(m.meta_mensual||'')+'" placeholder="Meta mensual"><button class="btn-save-meta" onclick="saveMeta(''+m.id+'')">Guardar</button><span class="meta-status" id="meta-st-'+m.id+'"></span>';
+    div.appendChild(row);
+  });
+}
+function saveMeta(marcaId){
+  var val=parseFloat(document.getElementById('meta-'+marcaId).value)||0;
+  rpc('vta_set_meta',{p_pin:SESSION.pin,p_marca:marcaId,p_meta:val}).then(function(){
+    var st=document.getElementById('meta-st-'+marcaId);st.textContent='OK';
+    setTimeout(function(){st.textContent='';},2000);
+    var m=MARCAS.find(function(x){return x.id===marcaId;});if(m)m.meta_mensual=val;
+    loadMarcas();
+  }).catch(function(e){document.getElementById('meta-st-'+marcaId).textContent='Error: '+e.message;});
+}
+function saveAllMarcas(){
+  var periodo=document.getElementById('periodo-marca').value;
+  if(!periodo||!SESSION)return;
+  var ok=0,fail=0,total=MARCAS.length,done=0;
+  document.getElementById('marca-global-status').textContent='Guardando...';
+  MARCAS.forEach(function(m){
+    var real=parseFloat(document.getElementById('mr-'+m.id).value)||null;
+    var ant=parseFloat(document.getElementById('ma-'+m.id).value)||null;
+    rpc('vta_upsert_marca',{p_pin:SESSION.pin,p_marca:m.id,p_periodo:periodo,p_venta_real:real,p_venta_anio_anterior:ant}).then(function(){
+      document.getElementById('ms-'+m.id).textContent='OK';ok++;done++;
+      if(done===total){document.getElementById('marca-global-status').textContent=ok+' guardadas'+(fail?' | '+fail+' errores':'');setTimeout(loadMarcas,500);}
+    }).catch(function(){
+      document.getElementById('ms-'+m.id).textContent='Error';fail++;done++;
+      if(done===total)document.getElementById('marca-global-status').textContent=ok+' guardadas | '+fail+' errores';
+    });
+  });
+}
+</script>
+</body>
+</html>
