@@ -3,263 +3,258 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ventas — Recouromex</title>
+<title>Ventas · Seguimiento Comercial — Recouromex</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#222}
-header{background:#1a1a2e;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px}
-header h1{font-size:1.2rem;font-weight:700}
-.badge{background:#e94560;color:#fff;font-size:.7rem;padding:2px 8px;border-radius:12px}
-#login-screen{display:flex;justify-content:center;align-items:center;min-height:90vh}
-.login-box{background:#fff;border-radius:12px;padding:40px;box-shadow:0 4px 20px rgba(0,0,0,.1);width:320px;text-align:center}
-.login-box h2{margin-bottom:24px;color:#1a1a2e}
-.pin-input{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
-.pin-input input{width:44px;height:52px;font-size:1.4rem;text-align:center;border:2px solid #ddd;border-radius:8px;outline:none}
-.pin-input input:focus{border-color:#e94560}
-.btn-primary{background:#e94560;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:1rem;cursor:pointer;width:100%}
-.btn-primary:hover{background:#c73652}
-.error-msg{color:#e94560;font-size:.85rem;margin-top:8px;min-height:20px}
-#app{display:none}
-.topbar{background:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e0e0e0}
-.topbar .user-info{font-size:.9rem;color:#555}
-.btn-logout{background:none;border:1px solid #ccc;padding:5px 14px;border-radius:6px;cursor:pointer;font-size:.85rem}
-.tabs{display:flex;background:#fff;border-bottom:2px solid #e0e0e0;padding:0 20px}
-.tab{padding:12px 24px;cursor:pointer;font-weight:600;color:#888;border-bottom:3px solid transparent;margin-bottom:-2px}
-.tab.active{color:#e94560;border-bottom-color:#e94560}
-.tab-content{display:none;padding:20px}
-.tab-content.active{display:block}
-.card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px}
-.card h3{font-size:1rem;color:#1a1a2e;margin-bottom:14px}
-.periodo-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.periodo-row label{font-size:.85rem;color:#666}
-.periodo-row input[type=month]{border:1px solid #ddd;border-radius:6px;padding:6px 10px;font-size:.9rem}
-.vendor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
-.vendor-card{border:1px solid #e0e0e0;border-radius:8px;padding:14px}
-.vendor-card label{font-weight:600;font-size:.9rem;display:block;margin-bottom:8px;color:#333}
-.vendor-card .input-monto{width:100%;border:1px solid #ddd;border-radius:6px;padding:8px 10px;font-size:1rem;text-align:right}
-.vendor-card .input-monto:focus{outline:none;border-color:#e94560}
-.vendor-card .save-status{font-size:.75rem;color:#aaa;margin-top:4px;min-height:16px}
-.marca-table{width:100%;border-collapse:collapse;font-size:.9rem}
-.marca-table th{text-align:left;padding:8px 10px;background:#f8f8f8;border-bottom:2px solid #eee;color:#555;font-weight:600}
-.marca-table td{padding:10px;border-bottom:1px solid #f0f0f0}
-.marca-table input{width:100%;border:1px solid #ddd;border-radius:6px;padding:6px 8px;font-size:.9rem;text-align:right}
-.marca-table input:focus{outline:none;border-color:#e94560}
-.marca-table .status-cell{font-size:.75rem;color:#aaa}
-.btn-save-all{background:#1a1a2e;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;margin-top:12px}
-.btn-save-all:hover{background:#2d2d4e}
-.meta-section{border-top:1px solid #eee;margin-top:16px;padding-top:14px}
-.meta-section h4{font-size:.85rem;color:#888;margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
-.meta-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
-.meta-row label{min-width:160px;font-size:.9rem}
-.meta-row input{width:140px;border:1px solid #ddd;border-radius:6px;padding:6px 8px;font-size:.9rem;text-align:right}
-.btn-save-meta{background:#4caf50;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.85rem}
-.meta-status{font-size:.75rem;color:#aaa}
-.loading{text-align:center;padding:30px;color:#aaa}
+  :root{--ink:#15212e;--navy:#1F3864;--navy-deep:#16294a;--accent:#2E75B6;--green:#2e7d4f;--green-deep:#236340;--card:#ffffff;--line:#d7dde6;--ok:#2e7d4f;--warn:#c9952b;--bad:#b53a2e;--muted:#6b7280;--shadow:0 1px 3px rgba(31,56,100,.07),0 10px 30px rgba(31,56,100,.09);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,'Times New Roman',serif;background:radial-gradient(1200px 600px at 85% -15%,rgba(46,125,79,.10),transparent 55%),linear-gradient(180deg,#e8edf3,#eef1f5);color:var(--ink);min-height:100vh;padding:0 0 80px}
+  .topbar{background:linear-gradient(135deg,var(--navy-deep),var(--navy));color:#fff;padding:22px 32px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-bottom:3px solid var(--green)}
+  .topbar .eyebrow{font-family:Arial,sans-serif;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#bcd2ec;font-weight:700}
+  .topbar h1{font-size:25px;letter-spacing:.5px;margin-top:3px;line-height:1.1}
+  .topbar .period{text-align:right;font-family:Arial,sans-serif}
+  .topbar .period .lbl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#bcd2ec}
+  .topbar .period .val{font-family:Georgia,serif;font-size:18px;font-weight:bold;margin-top:3px}
+  .wrap{max-width:1080px;margin:0 auto;padding:24px 24px 0}
+  .sessionbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 18px;margin-bottom:18px;font-family:Arial,sans-serif;font-size:12px;box-shadow:var(--shadow)}
+  .sessionbar .who{color:var(--muted)} .sessionbar .who b{color:var(--navy);font-family:Georgia,serif;font-size:14px}
+  .sessionbar .sync{color:var(--muted);font-size:11px}
+  .pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-left:6px}
+  .pill.on{background:rgba(46,125,79,.12);color:var(--green)} .pill.off{background:rgba(107,114,128,.12);color:var(--muted)}
+  .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  .tab{font-family:Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--muted);padding:10px 20px;border-radius:10px 10px 0 0;transition:.15s}
+  .tab.on{background:var(--green);border-color:var(--green);color:#fff}
+  .pane{display:none} .pane.on{display:block}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:22px}
+  .chead{padding:16px 22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#f7f9fc,#eef2f7)}
+  .chead .t{font-size:19px;color:var(--navy)} .chead .t small{display:block;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:3px}
+  table{width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px}
+  thead th{background:#f4f6fa;color:var(--muted);font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:11px 14px;text-align:left}
+  thead th.r{text-align:right} thead th.c{text-align:center}
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tbody td.r{text-align:right} tbody td.c{text-align:center}
+  tbody tr:hover{background:#fbfcfe}
+  tfoot td{padding:13px 14px;font-family:Georgia,serif;font-weight:bold;border-top:2px solid var(--line);background:#f7f9fc}
+  tfoot td.r{text-align:right}
+  .nm{font-family:Georgia,serif;font-size:15px;color:var(--ink)}
+  .money-in{width:140px;font-family:Arial,sans-serif;font-size:14px;text-align:right;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff}
+  .pct{font-family:Arial,sans-serif;font-size:13px;color:var(--muted)}
+  .sem{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:4px 11px;border-radius:18px;color:#fff;white-space:nowrap}
+  .sem.ok{background:var(--ok)} .sem.warn{background:var(--warn)} .sem.bad{background:var(--bad)} .sem.none{background:#9aa3af}
+  .yoy{font-family:Arial,sans-serif;font-size:13px;font-weight:700}
+  .yoy.up{color:var(--ok)} .yoy.down{color:var(--bad)} .yoy.flat{color:var(--muted)}
+  .meta-ro{font-family:Georgia,serif}
+  .actions{display:flex;gap:12px;justify-content:center;margin:8px 0 4px;flex-wrap:wrap}
+  button.act{font-family:Arial,sans-serif;font-size:13px;cursor:pointer;border:1px solid var(--green);background:var(--green);color:#fff;padding:11px 22px;border-radius:10px;transition:.2s}
+  button.act.ghost{background:transparent;color:var(--green)}
+  button.act:disabled{opacity:.5;cursor:not-allowed}
+  button.act:hover:not(:disabled){background:var(--green-deep);color:#fff}
+  .note{font-family:Arial,sans-serif;font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
+  .overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(22,41,74,.97),rgba(31,56,100,.97));padding:20px}
+  .overlay.hidden{display:none}
+  .loginbox{background:var(--card);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.4);width:100%;max-width:390px;padding:34px 30px;text-align:center}
+  .loginbox .eyebrow{font-family:Arial,sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--green);font-weight:700}
+  .loginbox h2{font-family:Georgia,serif;font-size:23px;color:var(--navy);margin:8px 0 4px}
+  .loginbox p{font-family:Arial,sans-serif;font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:20px}
+  .loginbox input{width:100%;font-family:Arial,sans-serif;font-size:22px;letter-spacing:.4em;text-align:center;padding:12px;border:1px solid var(--line);border-radius:10px;margin-bottom:14px}
+  .loginbox button{width:100%;font-family:Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;background:var(--green);color:#fff;padding:13px;border-radius:10px}
+  .loginbox button:hover{background:var(--green-deep)}
+  .loginbox .msg{font-family:Arial,sans-serif;font-size:12.5px;margin-top:14px;min-height:18px}
+  .loginbox .msg.err{color:var(--bad)} .loginbox .msg.info{color:var(--muted)}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(80px);background:var(--navy-deep);color:#fff;font-family:Arial,sans-serif;font-size:13px;padding:13px 22px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:.25s;z-index:1100;max-width:90vw;text-align:center}
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  .toast.err{background:var(--bad)} .toast.ok{background:var(--ok)}
 </style>
 </head>
 <body>
-<header>
-  <h1>Ventas Recouromex</h1>
-  <span class="badge" id="header-rol"></span>
-</header>
-<div id="login-screen">
-  <div class="login-box">
+<div class="overlay" id="loginOverlay">
+  <div class="loginbox">
+    <div class="eyebrow">Recouromex · Ventas</div>
     <h2>Acceso</h2>
-    <p style="color:#888;font-size:.85rem;margin-bottom:20px;">Ingresa tu PIN de 4 digitos</p>
-    <div class="pin-input">
-      <input type="password" maxlength="1" id="p0" inputmode="numeric">
-      <input type="password" maxlength="1" id="p1" inputmode="numeric">
-      <input type="password" maxlength="1" id="p2" inputmode="numeric">
-      <input type="password" maxlength="1" id="p3" inputmode="numeric">
-    </div>
-    <button class="btn-primary" onclick="doLogin()">Entrar</button>
-    <div class="error-msg" id="login-error"></div>
+    <p>Ingresa tu PIN para capturar las ventas del mes.</p>
+    <input id="pinInput" type="password" inputmode="numeric" maxlength="6" placeholder="••••" autocomplete="off">
+    <button id="pinBtn">Entrar</button>
+    <div class="msg info" id="loginMsg">Conectando…</div>
   </div>
 </div>
-<div id="app">
-  <div class="topbar">
-    <span class="user-info">Hola <strong id="user-nombre"></strong> &mdash; <span id="user-rol"></span></span>
-    <button class="btn-logout" onclick="doLogout()">Salir</button>
+<div id="toast" class="toast"></div>
+<div class="topbar">
+  <div>
+    <div class="eyebrow">Recouromex · Seguimiento Comercial</div>
+    <h1>Ventas</h1>
+  </div>
+  <div class="period">
+    <div class="lbl">Periodo</div>
+    <div class="val" id="periodVal">—</div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="sessionbar">
+    <div class="who">En sesión: <b id="sessUser">—</b><span class="pill off" id="sessPill">sin sesión</span></div>
+    <div class="sync">Periodo activo: <b id="sessPeriodo">—</b> · <span id="syncState">sincronización en pausa</span></div>
   </div>
   <div class="tabs">
-    <div class="tab active" onclick="switchTab(0)">Ventas por Vendedor</div>
-    <div class="tab" onclick="switchTab(1)">Ventas por Marca</div>
+    <button class="tab on" id="tab1" onclick="showTab(1)">Global por vendedor</button>
+    <button class="tab" id="tab2" onclick="showTab(2)">Por marca · vs. meta</button>
   </div>
-  <div class="tab-content active" id="tab0">
+  <div class="pane on" id="pane1">
     <div class="card">
-      <h3>Periodo</h3>
-      <div class="periodo-row">
-        <label>Mes:</label>
-        <input type="month" id="periodo-vend" onchange="loadVendedores()">
-      </div>
-      <div class="vendor-grid" id="vendor-grid"><div class="loading">Cargando...</div></div>
-      <button class="btn-save-all" onclick="saveAllVendedores()">Guardar todo</button>
-      <div id="vend-global-status" style="font-size:.8rem;color:#888;margin-top:6px;"></div>
-    </div>
-  </div>
-  <div class="tab-content" id="tab1">
-    <div class="card">
-      <h3>Periodo</h3>
-      <div class="periodo-row">
-        <label>Mes:</label>
-        <input type="month" id="periodo-marca" onchange="loadMarcas()">
-      </div>
-      <table class="marca-table">
-        <thead><tr><th>Marca</th><th>Venta Real</th><th>Anio Anterior</th><th>Meta</th><th>% Meta</th><th>Estado</th></tr></thead>
-        <tbody id="marca-tbody"><tr><td colspan="6" class="loading">Cargando...</td></tr></tbody>
+      <div class="chead"><div class="t"><small>Lectura 1 · operación comercial del mes</small>Ventas globales por vendedor</div></div>
+      <table>
+        <thead><tr><th>Vendedor</th><th class="r">Venta del mes</th><th class="r">% del total</th></tr></thead>
+        <tbody id="vendBody"></tbody>
+        <tfoot><tr><td>Total del mes</td><td class="r" id="vendTotal">$0</td><td class="r">100%</td></tr></tfoot>
       </table>
-      <button class="btn-save-all" onclick="saveAllMarcas()">Guardar todo</button>
-      <div id="marca-global-status" style="font-size:.8rem;color:#888;margin-top:6px;"></div>
-      <div class="meta-section" id="meta-section" style="display:none;">
-        <h4>Editar Metas Mensuales</h4>
-        <div id="meta-rows"></div>
-      </div>
     </div>
+    <div class="actions"><button class="act" id="saveVendBtn">Guardar ventas</button></div>
+    <p class="note">Ventas totales de Recouromex (LC + RC) por vendedor. Es seguimiento de operación, sin meta.</p>
+  </div>
+  <div class="pane" id="pane2">
+    <div class="card">
+      <div class="chead"><div class="t"><small>Lectura 2 · cumplimiento de objetivo por marca</small>Ventas por marca vs. meta</div></div>
+      <table>
+        <thead><tr>
+          <th>Marca</th><th class="r">Venta real</th><th class="r">Mismo mes año ant.</th>
+          <th class="r">Meta mensual</th><th class="c">Cumplimiento</th><th class="c">Interanual</th>
+        </tr></thead>
+        <tbody id="marcaBody"></tbody>
+      </table>
+    </div>
+    <div class="actions"><button class="act" id="saveMarcaBtn">Guardar</button></div>
+    <p class="note" id="metaNote">Cumplimiento = venta real ÷ meta. Verde ≥100% · ámbar 80–99% · rojo &lt;80% · gris si no hay meta.</p>
   </div>
 </div>
 <script>
-var SUPA_URL='https://qcwpnovwyhzhqqmhjxco.supabase.co';
-var SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjd3Bub3Z3eWh6aHFxbWhqeGNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDA3OTUsImV4cCI6MjA5NTI3Njc5NX0.-MSnn07PdxstQ90OLf16823Nvihr47ePXoQSFvgC3mU';
-var SESSION=null,VENDEDORES=[],MARCAS=[];
-function rpc(fn,p){return fetch(SUPA_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'},body:JSON.stringify(p)}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.message||JSON.stringify(d));return d;});});}
-function sel(t,q){return fetch(SUPA_URL+'/rest/v1/'+t+'?order=orden&'+(q||''),{headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}}).then(function(r){return r.json();});}
-['p0','p1','p2','p3'].forEach(function(id,i){
-  document.getElementById(id).addEventListener('input',function(e){if(e.target.value.length===1&&i<3)document.getElementById('p'+(i+1)).focus();if(i===3)doLogin();});
-  document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Backspace'&&e.target.value===''&&i>0)document.getElementById('p'+(i-1)).focus();});
+const CONFIG={SUPABASE_URL:"https://qcwpnovwyhzhqqmhjxco.supabase.co",SUPABASE_ANON_KEY:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjd3Bub3Z3eWh6aHFxbWhqeGNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDA3OTUsImV4cCI6MjA5NTI3Njc5NX0.-MSnn07PdxstQ90OLf16823Nvihr47ePXoQSFvgC3mU",PERIODO:""};
+let db=null;
+const SESSION={pin:null,evalId:null,evalNombre:null,evalRol:null};
+let PERIODO=CONFIG.PERIODO||(()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');})();
+let dirty=false,syncTimer=null;
+const cfgOK=CONFIG.SUPABASE_URL&&!CONFIG.SUPABASE_URL.startsWith("PEGAR")&&CONFIG.SUPABASE_ANON_KEY&&!CONFIG.SUPABASE_ANON_KEY.startsWith("PEGAR");
+let VEND=[],MARCAS=[];
+const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function periodoLabel(per){const p=String(per).split('-');return(MES[parseInt(p[1],10)-1]||per)+' '+p[0];}
+function money(v){if(v==null||v==='')return '—';const n=Number(v);if(isNaN(n))return '—';return'$'+n.toLocaleString('es-MX',{maximumFractionDigits:0});}
+function num(v){return(v===''||v==null)?null:(isNaN(parseFloat(v))?null:parseFloat(v));}
+function toast(msg,kind){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(kind?(' '+kind):'');clearTimeout(t._h);t._h=setTimeout(()=>{t.className='toast';},3800);}
+function markDirty(){dirty=true;document.getElementById('syncState').innerHTML='cambios sin guardar · sincronización en pausa';}
+function showTab(n){document.getElementById('tab1').classList.toggle('on',n===1);document.getElementById('tab2').classList.toggle('on',n===2);document.getElementById('pane1').classList.toggle('on',n===1);document.getElementById('pane2').classList.toggle('on',n===2);}
+function renderVend(){
+  const tb=document.getElementById('vendBody');tb.innerHTML='';
+  const total=VEND.reduce((s,v)=>s+(v.monto||0),0);
+  VEND.forEach((v,i)=>{
+    const pct=total>0&&v.monto!=null?Math.round(v.monto/total*100):0;
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td><span class="nm">'+v.nombre+'</span></td><td class="r"><input class="money-in" type="number" min="0" step="any" data-vi="'+i+'" value="'+(v.monto??'')+'" placeholder="0"></td><td class="r"><span class="pct">'+(total>0?pct+'%':'—')+'</span></td>';
+    tb.appendChild(tr);
+  });
+  document.getElementById('vendTotal').textContent=money(total);
+}
+function renderMarca(){
+  const tb=document.getElementById('marcaBody');tb.innerHTML='';
+  const esDir=SESSION.evalId==='direccion';
+  MARCAS.forEach((m,i)=>{
+    const real=m.venta_real,prev=m.venta_anio_anterior,meta=m.meta_mensual;
+    let sem='<span class="sem none">sin meta</span>';
+    if(meta&&meta>0&&real!=null){const c=Math.round(real/meta*100);const cls=c>=100?'ok':(c>=80?'warn':'bad');sem='<span class="sem '+cls+'">'+c+'% de meta</span>';}
+    let yoy='<span class="yoy flat">—</span>';
+    if(prev&&prev>0&&real!=null){const d=Math.round((real-prev)/prev*100);const cls=d>0?'up':(d<0?'down':'flat');const arrow=d>0?'▲':(d<0?'▼':'■');yoy='<span class="yoy '+cls+'">'+arrow+' '+(d>0?'+':'')+d+'%</span>';}
+    const metaCell=esDir?'<input class="money-in" type="number" min="0" step="any" data-mmeta="'+i+'" value="'+(meta??'')+'" placeholder="0">':'<span class="meta-ro">'+(meta&&meta>0?money(meta):'—')+'</span>';
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td><span class="nm">'+m.nombre+'</span></td><td class="r"><input class="money-in" type="number" min="0" step="any" data-mreal="'+i+'" value="'+(real??'')+'" placeholder="0"></td><td class="r"><input class="money-in" type="number" min="0" step="any" data-mprev="'+i+'" value="'+(prev??'')+'" placeholder="0"></td><td class="r">'+metaCell+'</td><td class="c">'+sem+'</td><td class="c">'+yoy+'</td>';
+    tb.appendChild(tr);
+  });
+  document.getElementById('metaNote').innerHTML=esDir?'Cumplimiento = venta real ÷ meta. Verde ≥100% · ámbar 80–99% · rojo &lt;80% · gris si no hay meta. <b>Puedes editar las metas</b> (las guarda al dar Guardar).':'Cumplimiento = venta real ÷ meta. Verde ≥100% · ámbar 80–99% · rojo &lt;80% · gris si no hay meta. Las metas solo las edita Dirección.';
+}
+document.addEventListener('input',e=>{
+  const t=e.target;if(!t.dataset)return;
+  if(t.dataset.vi!==undefined){VEND[+t.dataset.vi].monto=num(t.value);markDirty();renderVend();}
+  else if(t.dataset.mreal!==undefined){MARCAS[+t.dataset.mreal].venta_real=num(t.value);markDirty();renderMarca();}
+  else if(t.dataset.mprev!==undefined){MARCAS[+t.dataset.mprev].venta_anio_anterior=num(t.value);markDirty();renderMarca();}
+  else if(t.dataset.mmeta!==undefined){MARCAS[+t.dataset.mmeta].meta_mensual=num(t.value);markDirty();renderMarca();}
 });
-function doLogin(){
-  var pin=['p0','p1','p2','p3'].map(function(id){return document.getElementById(id).value;}).join('');
-  if(pin.length<4)return;
-  rpc('vta_check_pin',{p_pin:pin}).then(function(evalId){
-    if(!evalId){showError('PIN incorrecto');return;}
-    sel('vta_evaluadores_publico','id=eq.'+evalId).then(function(rows){
-      var ev=rows[0];
-      SESSION={pin:pin,id:evalId,nombre:ev.nombre,rol:ev.rol};
-      showApp();
-    });
-  }).catch(function(e){showError('Error: '+e.message);});
+async function load(){
+  if(!db)return;
+  try{
+    const[vRes,mRes,vvRes,vmRes]=await Promise.all([
+      db.from('vta_vendedores').select('id,nombre,orden,activo').eq('activo',true).order('orden'),
+      db.from('vta_marcas').select('id,nombre,meta_mensual,orden,activo').eq('activo',true).order('orden'),
+      db.from('vta_ventas_vendedor').select('vendedor_id,monto').eq('periodo',PERIODO),
+      db.from('vta_ventas_marca').select('marca_id,venta_real,venta_anio_anterior').eq('periodo',PERIODO)
+    ]);
+    for(const r of[vRes,mRes,vvRes,vmRes])if(r.error)throw r.error;
+    const vv={};(vvRes.data||[]).forEach(r=>vv[r.vendedor_id]=r);
+    const vm={};(vmRes.data||[]).forEach(r=>vm[r.marca_id]=r);
+    VEND=(vRes.data||[]).map(v=>({id:v.id,nombre:v.nombre,monto:(vv[v.id]?(vv[v.id].monto??null):null)}));
+    MARCAS=(mRes.data||[]).map(m=>{const c=vm[m.id]||{};return{id:m.id,nombre:m.nombre,meta_mensual:(m.meta_mensual??0),_metaOrig:(m.meta_mensual??0),venta_real:(c.venta_real??null),venta_anio_anterior:(c.venta_anio_anterior??null)};});
+    dirty=false;renderVend();renderMarca();
+    document.getElementById('syncState').textContent='actualizado';
+  }catch(err){console.error(err);toast('Error al cargar: '+(err.message||err),'err');}
 }
-function showError(msg){
-  document.getElementById('login-error').textContent=msg;
-  ['p0','p1','p2','p3'].forEach(function(id){document.getElementById(id).value='';});
-  document.getElementById('p0').focus();
+async function saveVendedores(){
+  if(!db||!SESSION.pin){toast('Inicia sesión con tu PIN','err');return;}
+  const btn=document.getElementById('saveVendBtn');const o=btn.textContent;btn.disabled=true;btn.textContent='Guardando…';
+  let ok=0,err=0;
+  try{
+    for(const v of VEND){const{error}=await db.rpc('vta_upsert_vendedor',{p_pin:SESSION.pin,p_vendedor:v.id,p_periodo:PERIODO,p_monto:v.monto});if(error){err++;console.error(v.id,error);}else ok++;}
+    dirty=false;
+    if(err===0){toast('Ventas guardadas · '+ok+' vendedores ✓','ok');document.getElementById('syncState').textContent='guardado';}
+    else toast('Guardado parcial: '+ok+' ok, '+err+' con error','err');
+  }finally{btn.disabled=false;btn.textContent=o;}
 }
-function showApp(){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').style.display='block';
-  document.getElementById('user-nombre').textContent=SESSION.nombre;
-  document.getElementById('user-rol').textContent=SESSION.rol;
-  document.getElementById('header-rol').textContent=SESSION.rol;
-  var now=new Date();
-  var ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
-  document.getElementById('periodo-vend').value=ym;
-  document.getElementById('periodo-marca').value=ym;
-  if(SESSION.rol==='Direccion')document.getElementById('meta-section').style.display='block';
-  loadVendedores();loadMarcas();
+async function saveMarcas(){
+  if(!db||!SESSION.pin){toast('Inicia sesión con tu PIN','err');return;}
+  const esDir=SESSION.evalId==='direccion';
+  const btn=document.getElementById('saveMarcaBtn');const o=btn.textContent;btn.disabled=true;btn.textContent='Guardando…';
+  let ok=0,err=0,metas=0;
+  try{
+    for(const m of MARCAS){
+      const{error}=await db.rpc('vta_upsert_marca',{p_pin:SESSION.pin,p_marca:m.id,p_periodo:PERIODO,p_venta_real:m.venta_real,p_venta_anio_anterior:m.venta_anio_anterior});
+      if(error){err++;console.error(m.id,error);}else ok++;
+      if(esDir&&(m.meta_mensual??0)!==(m._metaOrig??0)){const r=await db.rpc('vta_set_meta',{p_pin:SESSION.pin,p_marca:m.id,p_meta:(m.meta_mensual??0)});if(!r.error){metas++;m._metaOrig=m.meta_mensual;}else console.error('meta',m.id,r.error);}
+    }
+    dirty=false;
+    if(err===0){toast('Guardado ✓ · '+ok+' marcas'+(metas?(' · '+metas+' metas'):''),'ok');document.getElementById('syncState').textContent='guardado';}
+    else toast('Guardado parcial: '+ok+' ok, '+err+' con error','err');
+  }finally{btn.disabled=false;btn.textContent=o;}
 }
-function doLogout(){
-  SESSION=null;
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('app').style.display='none';
-  ['p0','p1','p2','p3'].forEach(function(id){document.getElementById(id).value='';});
-  document.getElementById('p0').focus();
+function startSync(){if(syncTimer)clearInterval(syncTimer);syncTimer=setInterval(()=>{if(dirty)return;load();},30000);}
+async function doLogin(){
+  const msg=document.getElementById('loginMsg');
+  const pin=document.getElementById('pinInput').value.trim();
+  if(!pin){msg.className='msg err';msg.textContent='Escribe tu PIN.';return;}
+  if(!db){msg.className='msg err';msg.textContent='Falta configurar el acceso (bloque CONFIG).';return;}
+  msg.className='msg info';msg.textContent='Verificando…';
+  try{
+    const{data,error}=await db.rpc('vta_check_pin',{p_pin:pin});
+    if(error)throw error;
+    if(!data){msg.className='msg err';msg.textContent='PIN incorrecto.';return;}
+    SESSION.pin=pin;SESSION.evalId=data;
+    const ev=await db.from('vta_evaluadores_publico').select('id,nombre,rol').eq('id',data).maybeSingle();
+    SESSION.evalNombre=ev.data?ev.data.nombre:data;SESSION.evalRol=ev.data?ev.data.rol:'';
+    document.getElementById('sessUser').textContent=SESSION.evalNombre;
+    const pill=document.getElementById('sessPill');pill.className='pill on';pill.textContent=SESSION.evalRol||'en sesión';
+    document.getElementById('sessPeriodo').textContent=PERIODO;
+    document.getElementById('loginOverlay').classList.add('hidden');
+    await load();startSync();
+    toast('Bienvenido(a), '+SESSION.evalNombre,'ok');
+  }catch(err){console.error(err);msg.className='msg err';msg.textContent='Error al validar PIN: '+(err.message||err);}
 }
-function switchTab(n){
-  document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',i===n);});
-  document.querySelectorAll('.tab-content').forEach(function(c,i){c.classList.toggle('active',i===n);});
+function init(){
+  document.getElementById('periodVal').textContent=periodoLabel(PERIODO);
+  document.getElementById('sessPeriodo').textContent=PERIODO;
+  renderVend();renderMarca();
+  const msg=document.getElementById('loginMsg');
+  if(!cfgOK){msg.className='msg err';msg.innerHTML='Falta configurar la URL y la llave en el bloque CONFIG.';document.getElementById('pinBtn').disabled=true;return;}
+  db=window.supabase.createClient(CONFIG.SUPABASE_URL,CONFIG.SUPABASE_ANON_KEY);
+  msg.className='msg info';msg.textContent='Conectado. Ingresa tu PIN.';
+  document.getElementById('pinBtn').addEventListener('click',doLogin);
+  document.getElementById('pinInput').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+  document.getElementById('saveVendBtn').addEventListener('click',saveVendedores);
+  document.getElementById('saveMarcaBtn').addEventListener('click',saveMarcas);
+  document.getElementById('pinInput').focus();
 }
-function loadVendedores(){
-  var periodo=document.getElementById('periodo-vend').value;
-  if(!periodo)return;
-  document.getElementById('vendor-grid').innerHTML='<div class="loading">Cargando...</div>';
-  sel('vta_vendedores','activo=eq.true').then(function(vs){
-    VENDEDORES=vs;
-    sel('vta_ventas_vendedor','periodo=eq.'+periodo).then(function(ventas){
-      var vm={};ventas.forEach(function(v){vm[v.vendedor_id]=v.monto;});
-      var grid=document.getElementById('vendor-grid');grid.innerHTML='';
-      VENDEDORES.forEach(function(v){
-        var div=document.createElement('div');div.className='vendor-card';
-        div.innerHTML='<label>'+v.nombre+'</label><input class="input-monto" type="number" min="0" step="0.01" id="monto-'+v.id+'" value="'+(vm[v.id]!==undefined?vm[v.id]:'')+'" placeholder="0.00"><div class="save-status" id="status-'+v.id+'"></div>';
-        grid.appendChild(div);
-      });
-    });
-  });
-}
-function saveAllVendedores(){
-  var periodo=document.getElementById('periodo-vend').value;
-  if(!periodo||!SESSION)return;
-  var ok=0,fail=0,total=VENDEDORES.length,done=0;
-  document.getElementById('vend-global-status').textContent='Guardando...';
-  VENDEDORES.forEach(function(v){
-    var val=document.getElementById('monto-'+v.id).value;
-    var monto=val===''?null:parseFloat(val);
-    rpc('vta_upsert_vendedor',{p_pin:SESSION.pin,p_vendedor:v.id,p_periodo:periodo,p_monto:monto}).then(function(){
-      document.getElementById('status-'+v.id).textContent='OK';ok++;done++;
-      if(done===total)document.getElementById('vend-global-status').textContent=ok+' guardados'+(fail?' | '+fail+' errores':'');
-    }).catch(function(){
-      document.getElementById('status-'+v.id).textContent='Error';fail++;done++;
-      if(done===total)document.getElementById('vend-global-status').textContent=ok+' guardados | '+fail+' errores';
-    });
-  });
-}
-function loadMarcas(){
-  var periodo=document.getElementById('periodo-marca').value;
-  if(!periodo)return;
-  document.getElementById('marca-tbody').innerHTML='<tr><td colspan="6" class="loading">Cargando...</td></tr>';
-  sel('vta_marcas','activo=eq.true').then(function(ms){
-    MARCAS=ms;
-    sel('vta_ventas_marca','periodo=eq.'+periodo).then(function(ventas){
-      var vm={};ventas.forEach(function(v){vm[v.marca_id]=v;});
-      var tbody=document.getElementById('marca-tbody');tbody.innerHTML='';
-      MARCAS.forEach(function(m){
-        var row=vm[m.id];
-        var real=row&&row.venta_real!==null?row.venta_real:'';
-        var ant=row&&row.venta_anio_anterior!==null?row.venta_anio_anterior:'';
-        var meta=m.meta_mensual||0;
-        var pct=real!==''&&meta>0?((parseFloat(real)/meta)*100).toFixed(1)+'%':'--';
-        var pctColor=pct!='--'?(parseFloat(pct)>=100?'#4caf50':parseFloat(pct)>=80?'#ff9800':'#e94560'):'#888';
-        var tr=document.createElement('tr');
-        tr.innerHTML='<td><strong>'+m.nombre+'</strong></td><td><input type="number" min="0" step="0.01" id="mr-'+m.id+'" value="'+real+'" placeholder="0.00"></td><td><input type="number" min="0" step="0.01" id="ma-'+m.id+'" value="'+ant+'" placeholder="0.00"></td><td style="text-align:right;color:#888">'+(meta>0?'$'+meta.toLocaleString():'--')+'</td><td style="text-align:center;font-weight:600;color:'+pctColor+'">'+pct+'</td><td class="status-cell" id="ms-'+m.id+'"></td>';
-        tbody.appendChild(tr);
-      });
-      if(SESSION&&SESSION.rol==='Direccion')renderMetaRows();
-    });
-  });
-}
-function renderMetaRows(){
-  var div=document.getElementById('meta-rows');div.innerHTML='';
-  MARCAS.forEach(function(m){
-    var row=document.createElement('div');row.className='meta-row';
-    row.innerHTML='<label>'+m.nombre+'</label><input type="number" min="0" step="1" id="meta-'+m.id+'" value="'+(m.meta_mensual||'')+'" placeholder="Meta mensual"><button class="btn-save-meta" onclick="saveMeta(''+m.id+'')">Guardar</button><span class="meta-status" id="meta-st-'+m.id+'"></span>';
-    div.appendChild(row);
-  });
-}
-function saveMeta(marcaId){
-  var val=parseFloat(document.getElementById('meta-'+marcaId).value)||0;
-  rpc('vta_set_meta',{p_pin:SESSION.pin,p_marca:marcaId,p_meta:val}).then(function(){
-    var st=document.getElementById('meta-st-'+marcaId);st.textContent='OK';
-    setTimeout(function(){st.textContent='';},2000);
-    var m=MARCAS.find(function(x){return x.id===marcaId;});if(m)m.meta_mensual=val;
-    loadMarcas();
-  }).catch(function(e){document.getElementById('meta-st-'+marcaId).textContent='Error: '+e.message;});
-}
-function saveAllMarcas(){
-  var periodo=document.getElementById('periodo-marca').value;
-  if(!periodo||!SESSION)return;
-  var ok=0,fail=0,total=MARCAS.length,done=0;
-  document.getElementById('marca-global-status').textContent='Guardando...';
-  MARCAS.forEach(function(m){
-    var real=parseFloat(document.getElementById('mr-'+m.id).value)||null;
-    var ant=parseFloat(document.getElementById('ma-'+m.id).value)||null;
-    rpc('vta_upsert_marca',{p_pin:SESSION.pin,p_marca:m.id,p_periodo:periodo,p_venta_real:real,p_venta_anio_anterior:ant}).then(function(){
-      document.getElementById('ms-'+m.id).textContent='OK';ok++;done++;
-      if(done===total){document.getElementById('marca-global-status').textContent=ok+' guardadas'+(fail?' | '+fail+' errores':'');setTimeout(loadMarcas,500);}
-    }).catch(function(){
-      document.getElementById('ms-'+m.id).textContent='Error';fail++;done++;
-      if(done===total)document.getElementById('marca-global-status').textContent=ok+' guardadas | '+fail+' errores';
-    });
-  });
-}
+init();
 </script>
 </body>
 </html>
