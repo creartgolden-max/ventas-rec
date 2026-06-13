@@ -14,7 +14,8 @@
   .topbar h1{font-size:25px;letter-spacing:.5px;margin-top:3px;line-height:1.1}
   .topbar .period{text-align:right;font-family:Arial,sans-serif}
   .topbar .period .lbl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#bcd2ec}
-  .topbar .period .val{font-family:Georgia,serif;font-size:18px;font-weight:bold;margin-top:3px}
+  .topbar .period select{margin-top:4px;font-family:Georgia,serif;font-size:17px;font-weight:bold;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:5px 10px;cursor:pointer}
+  .topbar .period select option{color:#15212e}
   .wrap{max-width:1080px;margin:0 auto;padding:24px 24px 0}
   .sessionbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 18px;margin-bottom:18px;font-family:Arial,sans-serif;font-size:12px;box-shadow:var(--shadow)}
   .sessionbar .who{color:var(--muted)} .sessionbar .who b{color:var(--navy);font-family:Georgia,serif;font-size:14px}
@@ -46,7 +47,6 @@
   .meta-ro{font-family:Georgia,serif}
   .actions{display:flex;gap:12px;justify-content:center;margin:8px 0 4px;flex-wrap:wrap}
   button.act{font-family:Arial,sans-serif;font-size:13px;cursor:pointer;border:1px solid var(--green);background:var(--green);color:#fff;padding:11px 22px;border-radius:10px;transition:.2s}
-  button.act.ghost{background:transparent;color:var(--green)}
   button.act:disabled{opacity:.5;cursor:not-allowed}
   button.act:hover:not(:disabled){background:var(--green-deep);color:#fff}
   .note{font-family:Arial,sans-serif;font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
@@ -85,7 +85,7 @@
   </div>
   <div class="period">
     <div class="lbl">Periodo</div>
-    <div class="val" id="periodVal">—</div>
+    <select id="periodSel"></select>
   </div>
 </div>
 <div class="wrap">
@@ -115,7 +115,7 @@
       <table>
         <thead><tr>
           <th>Marca</th><th class="r">Venta real</th><th class="r">Mismo mes año ant.</th>
-          <th class="r">Meta mensual</th><th class="c">Cumplimiento</th><th class="c">Interanual</th>
+          <th class="r">Meta del mes</th><th class="c">Cumplimiento</th><th class="c">Interanual</th>
         </tr></thead>
         <tbody id="marcaBody"></tbody>
       </table>
@@ -130,15 +130,16 @@ let db=null;
 const SESSION={pin:null,evalId:null,evalNombre:null,evalRol:null};
 let PERIODO=CONFIG.PERIODO||(()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');})();
 let dirty=false,syncTimer=null;
-const cfgOK=CONFIG.SUPABASE_URL&&!CONFIG.SUPABASE_URL.startsWith("PEGAR")&&CONFIG.SUPABASE_ANON_KEY&&!CONFIG.SUPABASE_ANON_KEY.startsWith("PEGAR");
+const cfgOK=CONFIG.SUPABASE_URL&&!CONFIG.SUPABASE_URL.startsWith('PEGAR')&&CONFIG.SUPABASE_ANON_KEY&&!CONFIG.SUPABASE_ANON_KEY.startsWith('PEGAR');
 let VEND=[],MARCAS=[];
-const MES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-function periodoLabel(per){const p=String(per).split('-');return(MES[parseInt(p[1],10)-1]||per)+' '+p[0];}
+const MES_NOMBRE=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function periodoLabel(per){const p=String(per).split('-');return(MES_NOMBRE[parseInt(p[1],10)-1]||per)+' '+p[0];}
 function money(v){if(v==null||v==='')return '—';const n=Number(v);if(isNaN(n))return '—';return'$'+n.toLocaleString('es-MX',{maximumFractionDigits:0});}
 function num(v){return(v===''||v==null)?null:(isNaN(parseFloat(v))?null:parseFloat(v));}
 function toast(msg,kind){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(kind?(' '+kind):'');clearTimeout(t._h);t._h=setTimeout(()=>{t.className='toast';},3800);}
 function markDirty(){dirty=true;document.getElementById('syncState').innerHTML='cambios sin guardar · sincronización en pausa';}
 function showTab(n){document.getElementById('tab1').classList.toggle('on',n===1);document.getElementById('tab2').classList.toggle('on',n===2);document.getElementById('pane1').classList.toggle('on',n===1);document.getElementById('pane2').classList.toggle('on',n===2);}
+function periodoMesAnio(){const p=String(PERIODO).split('-');return{anio:parseInt(p[0],10),mes:parseInt(p[1],10)};}
 function renderVend(){
   const tb=document.getElementById('vendBody');tb.innerHTML='';
   const total=VEND.reduce((s,v)=>s+(v.monto||0),0);
@@ -154,39 +155,48 @@ function renderMarca(){
   const tb=document.getElementById('marcaBody');tb.innerHTML='';
   const esDir=SESSION.evalId==='direccion';
   MARCAS.forEach((m,i)=>{
-    const real=m.venta_real,prev=m.venta_anio_anterior,meta=m.meta_mensual;
-    let sem='<span class="sem none">sin meta</span>';
-    if(meta&&meta>0&&real!=null){const c=Math.round(real/meta*100);const cls=c>=100?'ok':(c>=80?'warn':'bad');sem='<span class="sem '+cls+'">'+c+'% de meta</span>';}
+    const real=m.venta_real,prev=m.venta_anio_anterior,meta=m.meta;
+    let sem='<span class="sem none">—</span>';
+    if(m.hasMeta){
+      if(meta&&meta>0&&real!=null){const c=Math.round(real/meta*100);const cls=c>=100?'ok':(c>=80?'warn':'bad');sem='<span class="sem '+cls+'">'+c+'% de meta</span>';}
+      else{sem='<span class="sem none">sin meta</span>';}
+    }
     let yoy='<span class="yoy flat">—</span>';
     if(prev&&prev>0&&real!=null){const d=Math.round((real-prev)/prev*100);const cls=d>0?'up':(d<0?'down':'flat');const arrow=d>0?'▲':(d<0?'▼':'■');yoy='<span class="yoy '+cls+'">'+arrow+' '+(d>0?'+':'')+d+'%</span>';}
-    const metaCell=esDir?'<input class="money-in" type="number" min="0" step="any" data-mmeta="'+i+'" value="'+(meta??'')+'" placeholder="0">':'<span class="meta-ro">'+(meta&&meta>0?money(meta):'—')+'</span>';
+    let metaCell;
+    if(!m.hasMeta)metaCell='<span class="meta-ro" style="color:var(--muted)">—</span>';
+    else if(esDir)metaCell='<input class="money-in" type="number" min="0" step="any" data-mmeta="'+i+'" value="'+(meta??'')+'" placeholder="0">';
+    else metaCell='<span class="meta-ro">'+(meta&&meta>0?money(meta):'—')+'</span>';
     const tr=document.createElement('tr');
     tr.innerHTML='<td><span class="nm">'+m.nombre+'</span></td><td class="r"><input class="money-in" type="number" min="0" step="any" data-mreal="'+i+'" value="'+(real??'')+'" placeholder="0"></td><td class="r"><input class="money-in" type="number" min="0" step="any" data-mprev="'+i+'" value="'+(prev??'')+'" placeholder="0"></td><td class="r">'+metaCell+'</td><td class="c">'+sem+'</td><td class="c">'+yoy+'</td>';
     tb.appendChild(tr);
   });
-  document.getElementById('metaNote').innerHTML=esDir?'Cumplimiento = venta real ÷ meta. Verde ≥100% · ámbar 80–99% · rojo &lt;80% · gris si no hay meta. <b>Puedes editar las metas</b> (las guarda al dar Guardar).':'Cumplimiento = venta real ÷ meta. Verde ≥100% · ámbar 80–99% · rojo &lt;80% · gris si no hay meta. Las metas solo las edita Dirección.';
+  document.getElementById('metaNote').innerHTML=esDir?'Solo <b>GLOBAL</b> tiene meta (cambia cada mes). Verde ≥100% · ámbar 80–99% · rojo &lt;80%. LC y BR solo comparan contra el año anterior. <b>Puedes editar la meta GLOBAL del mes</b>.':'Solo <b>GLOBAL</b> tiene meta (cambia cada mes). Verde ≥100% · ámbar 80–99% · rojo &lt;80%. LC y BR solo comparan contra el año anterior. La meta solo la edita Dirección.';
 }
 document.addEventListener('input',e=>{
   const t=e.target;if(!t.dataset)return;
   if(t.dataset.vi!==undefined){VEND[+t.dataset.vi].monto=num(t.value);markDirty();renderVend();}
   else if(t.dataset.mreal!==undefined){MARCAS[+t.dataset.mreal].venta_real=num(t.value);markDirty();renderMarca();}
   else if(t.dataset.mprev!==undefined){MARCAS[+t.dataset.mprev].venta_anio_anterior=num(t.value);markDirty();renderMarca();}
-  else if(t.dataset.mmeta!==undefined){MARCAS[+t.dataset.mmeta].meta_mensual=num(t.value);markDirty();renderMarca();}
+  else if(t.dataset.mmeta!==undefined){MARCAS[+t.dataset.mmeta].meta=num(t.value);markDirty();renderMarca();}
 });
 async function load(){
   if(!db)return;
   try{
-    const[vRes,mRes,vvRes,vmRes]=await Promise.all([
+    const{mes,anio}=periodoMesAnio();
+    const[vRes,mRes,vvRes,vmRes,mmRes]=await Promise.all([
       db.from('vta_vendedores').select('id,nombre,orden,activo').eq('activo',true).order('orden'),
-      db.from('vta_marcas').select('id,nombre,meta_mensual,orden,activo').eq('activo',true).order('orden'),
+      db.from('vta_marcas').select('id,nombre,orden,activo').eq('activo',true).order('orden'),
       db.from('vta_ventas_vendedor').select('vendedor_id,monto').eq('periodo',PERIODO),
-      db.from('vta_ventas_marca').select('marca_id,venta_real,venta_anio_anterior').eq('periodo',PERIODO)
+      db.from('vta_ventas_marca').select('marca_id,venta_real,venta_anio_anterior').eq('periodo',PERIODO),
+      db.from('vta_metas_mensuales').select('marca_id,meta').eq('mes',mes).eq('anio',anio)
     ]);
-    for(const r of[vRes,mRes,vvRes,vmRes])if(r.error)throw r.error;
+    for(const r of[vRes,mRes,vvRes,vmRes,mmRes])if(r.error)throw r.error;
     const vv={};(vvRes.data||[]).forEach(r=>vv[r.vendedor_id]=r);
     const vm={};(vmRes.data||[]).forEach(r=>vm[r.marca_id]=r);
+    const mm={};(mmRes.data||[]).forEach(r=>mm[r.marca_id]=r.meta);
     VEND=(vRes.data||[]).map(v=>({id:v.id,nombre:v.nombre,monto:(vv[v.id]?(vv[v.id].monto??null):null)}));
-    MARCAS=(mRes.data||[]).map(m=>{const c=vm[m.id]||{};return{id:m.id,nombre:m.nombre,meta_mensual:(m.meta_mensual??0),_metaOrig:(m.meta_mensual??0),venta_real:(c.venta_real??null),venta_anio_anterior:(c.venta_anio_anterior??null)};});
+    MARCAS=(mRes.data||[]).map(m=>{const c=vm[m.id]||{};const tieneMeta=Object.prototype.hasOwnProperty.call(mm,m.id);return{id:m.id,nombre:m.nombre,hasMeta:tieneMeta,meta:(tieneMeta?(mm[m.id]??0):null),_metaOrig:(tieneMeta?(mm[m.id]??0):null),venta_real:(c.venta_real??null),venta_anio_anterior:(c.venta_anio_anterior??null)};});
     dirty=false;renderVend();renderMarca();
     document.getElementById('syncState').textContent='actualizado';
   }catch(err){console.error(err);toast('Error al cargar: '+(err.message||err),'err');}
@@ -205,13 +215,17 @@ async function saveVendedores(){
 async function saveMarcas(){
   if(!db||!SESSION.pin){toast('Inicia sesión con tu PIN','err');return;}
   const esDir=SESSION.evalId==='direccion';
+  const{mes,anio}=periodoMesAnio();
   const btn=document.getElementById('saveMarcaBtn');const o=btn.textContent;btn.disabled=true;btn.textContent='Guardando…';
   let ok=0,err=0,metas=0;
   try{
     for(const m of MARCAS){
       const{error}=await db.rpc('vta_upsert_marca',{p_pin:SESSION.pin,p_marca:m.id,p_periodo:PERIODO,p_venta_real:m.venta_real,p_venta_anio_anterior:m.venta_anio_anterior});
       if(error){err++;console.error(m.id,error);}else ok++;
-      if(esDir&&(m.meta_mensual??0)!==(m._metaOrig??0)){const r=await db.rpc('vta_set_meta',{p_pin:SESSION.pin,p_marca:m.id,p_meta:(m.meta_mensual??0)});if(!r.error){metas++;m._metaOrig=m.meta_mensual;}else console.error('meta',m.id,r.error);}
+      if(esDir&&m.hasMeta&&(m.meta??0)!==(m._metaOrig??0)){
+        const r=await db.rpc('vta_set_meta_mensual',{p_pin:SESSION.pin,p_marca:m.id,p_mes:mes,p_anio:anio,p_meta:(m.meta??0)});
+        if(!r.error){metas++;m._metaOrig=m.meta;}else console.error('meta',m.id,r.error);
+      }
     }
     dirty=false;
     if(err===0){toast('Guardado ✓ · '+ok+' marcas'+(metas?(' · '+metas+' metas'):''),'ok');document.getElementById('syncState').textContent='guardado';}
@@ -223,7 +237,7 @@ async function doLogin(){
   const msg=document.getElementById('loginMsg');
   const pin=document.getElementById('pinInput').value.trim();
   if(!pin){msg.className='msg err';msg.textContent='Escribe tu PIN.';return;}
-  if(!db){msg.className='msg err';msg.textContent='Falta configurar el acceso (bloque CONFIG).';return;}
+  if(!db){msg.className='msg err';msg.textContent='Falta configurar el acceso.';return;}
   msg.className='msg info';msg.textContent='Verificando…';
   try{
     const{data,error}=await db.rpc('vta_check_pin',{p_pin:pin});
@@ -240,8 +254,15 @@ async function doLogin(){
     toast('Bienvenido(a), '+SESSION.evalNombre,'ok');
   }catch(err){console.error(err);msg.className='msg err';msg.textContent='Error al validar PIN: '+(err.message||err);}
 }
+function fillPeriodSelect(){
+  const sel=document.getElementById('periodSel');if(!sel)return;sel.innerHTML='';
+  const anio=2026;
+  for(let m=1;m<=12;m++){const val=anio+'-'+String(m).padStart(2,'0');const o=document.createElement('option');o.value=val;o.textContent=MES_NOMBRE[m-1]+' '+anio;sel.appendChild(o);}
+  if([...sel.options].some(o=>o.value===PERIODO))sel.value=PERIODO;else{sel.value=anio+'-'+String(new Date().getMonth()+1).padStart(2,'0');PERIODO=sel.value;}
+  sel.addEventListener('change',e=>{PERIODO=e.target.value;document.getElementById('sessPeriodo').textContent=PERIODO;if(db&&SESSION.pin)load();});
+}
 function init(){
-  document.getElementById('periodVal').textContent=periodoLabel(PERIODO);
+  fillPeriodSelect();
   document.getElementById('sessPeriodo').textContent=PERIODO;
   renderVend();renderMarca();
   const msg=document.getElementById('loginMsg');
