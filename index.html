@@ -19,44 +19,49 @@
   .topbar h1{font-size:25px;letter-spacing:.5px;margin-top:3px;line-height:1.1}
   .topbar .period{text-align:right;font-family:Arial,sans-serif}
   .topbar .period .lbl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#bcd2ec}
-  .topbar .period .val{font-family:Georgia,serif;font-size:18px;font-weight:bold;margin-top:3px}
-  .wrap{max-width:1080px;margin:0 auto;padding:24px 24px 0}
+  .topbar .period select{margin-top:4px;font-family:Georgia,serif;font-size:17px;font-weight:bold;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:5px 10px;cursor:pointer}
+  .topbar .period select option{color:#15212e}
+  .wrap{max-width:1140px;margin:0 auto;padding:24px 24px 0}
+
   .sessionbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 18px;margin-bottom:18px;font-family:Arial,sans-serif;font-size:12px;box-shadow:var(--shadow)}
   .sessionbar .who{color:var(--muted)} .sessionbar .who b{color:var(--navy);font-family:Georgia,serif;font-size:14px}
   .sessionbar .sync{color:var(--muted);font-size:11px}
   .pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-left:6px}
   .pill.on{background:rgba(46,125,79,.12);color:var(--green)} .pill.off{background:rgba(107,114,128,.12);color:var(--muted)}
+
   .tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
   .tab{font-family:Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--muted);padding:10px 20px;border-radius:10px 10px 0 0;transition:.15s}
   .tab.on{background:var(--green);border-color:var(--green);color:#fff}
   .pane{display:none} .pane.on{display:block}
-  .topbar .period select{margin-top:4px;font-family:Georgia,serif;font-size:17px;font-weight:bold;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:5px 10px;cursor:pointer}
-  .topbar .period select option{color:#15212e}
+
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:22px}
   .chead{padding:16px 22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#f7f9fc,#eef2f7)}
-  .chead .t{font-size:19px;color:var(--navy)} .chead .t small{display:block;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:3px}
-  table{width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px}
-  thead th{background:#f4f6fa;color:var(--muted);font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:11px 14px;text-align:left}
-  thead th.r{text-align:right} thead th.c{text-align:center}
-  tbody td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
-  tbody td.r{text-align:right} tbody td.c{text-align:center}
-  tbody tr:hover{background:#fbfcfe}
-  tfoot td{padding:13px 14px;font-family:Georgia,serif;font-weight:bold;border-top:2px solid var(--line);background:#f7f9fc}
-  tfoot td.r{text-align:right}
-  .nm{font-family:Georgia,serif;font-size:15px;color:var(--ink)}
-  .money-in{width:140px;font-family:Arial,sans-serif;font-size:14px;text-align:right;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff}
-  .pct{font-family:Arial,sans-serif;font-size:13px;color:var(--muted)}
-  .sem{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:4px 11px;border-radius:18px;color:#fff;white-space:nowrap}
+  .chead .t{font-size:18px;color:var(--navy)} .chead .t small{display:block;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:3px}
+
+  .semwrap{overflow-x:auto}
+  .semtable{width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:13px;min-width:720px}
+  .semtable th{background:#f4f6fa;color:var(--muted);font-weight:600;font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:9px 8px;text-align:left;white-space:nowrap}
+  .semtable th.r{text-align:right}
+  .semtable td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+  .semtable td.r{text-align:right} .semtable td.c{text-align:center}
+  .semtable tbody tr:hover{background:#fbfcfe}
+  .semtable .totrow td, .semtable tfoot td{background:#f1f6f1;font-family:Georgia,serif;font-weight:bold;border-top:2px solid var(--line)}
+  .semtable .rowlbl{font-family:Georgia,serif;color:var(--ink)}
+  .nm{font-family:Georgia,serif;font-size:14px;color:var(--ink)}
+  .cell-money{width:88px;font-family:Arial,sans-serif;font-size:12.5px;text-align:right;border:1px solid var(--line);border-radius:6px;padding:5px 6px;background:#fff}
+  .ro{font-family:Georgia,serif;color:var(--muted)}
+  .sem{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:14px;color:#fff;white-space:nowrap}
   .sem.ok{background:var(--ok)} .sem.warn{background:var(--warn)} .sem.bad{background:var(--bad)} .sem.none{background:#9aa3af}
-  .yoy{font-family:Arial,sans-serif;font-size:13px;font-weight:700}
+  .yoy{font-family:Arial,sans-serif;font-size:12.5px;font-weight:700}
   .yoy.up{color:var(--ok)} .yoy.down{color:var(--bad)} .yoy.flat{color:var(--muted)}
-  .meta-ro{font-family:Georgia,serif}
+
   .actions{display:flex;gap:12px;justify-content:center;margin:8px 0 4px;flex-wrap:wrap}
   button.act{font-family:Arial,sans-serif;font-size:13px;cursor:pointer;border:1px solid var(--green);background:var(--green);color:#fff;padding:11px 22px;border-radius:10px;transition:.2s}
   button.act.ghost{background:transparent;color:var(--green)}
   button.act:disabled{opacity:.5;cursor:not-allowed}
   button.act:hover:not(:disabled){background:var(--green-deep);color:#fff}
   .note{font-family:Arial,sans-serif;font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6}
+
   .overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(22,41,74,.97),rgba(31,56,100,.97));padding:20px}
   .overlay.hidden{display:none}
   .loginbox{background:var(--card);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.4);width:100%;max-width:390px;padding:34px 30px;text-align:center}
@@ -74,86 +79,92 @@
 </style>
 </head>
 <body>
+
 <div class="overlay" id="loginOverlay">
   <div class="loginbox">
     <div class="eyebrow">Recouromex · Ventas</div>
     <h2>Acceso</h2>
-    <p>Ingresa tu PIN para capturar las ventas del mes.</p>
+    <p>Ingresa tu PIN para capturar las ventas del semestre.</p>
     <input id="pinInput" type="password" inputmode="numeric" maxlength="6" placeholder="••••" autocomplete="off">
     <button id="pinBtn">Entrar</button>
     <div class="msg info" id="loginMsg">Conectando…</div>
   </div>
 </div>
 <div id="toast" class="toast"></div>
+
 <div class="topbar">
   <div>
     <div class="eyebrow">Recouromex · Seguimiento Comercial</div>
     <h1>Ventas</h1>
   </div>
   <div class="period">
-    <div class="lbl">Periodo</div>
-    <select id="periodSel"></select>
+    <div class="lbl">Semestre 2026</div>
+    <select id="semSel">
+      <option value="1">1er Semestre (Ene–Jun)</option>
+      <option value="2">2do Semestre (Jul–Dic)</option>
+    </select>
   </div>
 </div>
+
 <div class="wrap">
   <div class="sessionbar">
     <div class="who">En sesión: <b id="sessUser">—</b><span class="pill off" id="sessPill">sin sesión</span></div>
-    <div class="sync">Periodo activo: <b id="sessPeriodo">—</b> · <span id="syncState">sincronización en pausa</span></div>
+    <div class="sync">Semestre activo: <b id="sessPeriodo">—</b> · <span id="syncState">sincronización en pausa</span></div>
   </div>
+
   <div class="tabs">
     <button class="tab on" id="tab1" onclick="showTab(1)">Global por vendedor</button>
     <button class="tab" id="tab2" onclick="showTab(2)">Por marca · vs. meta</button>
   </div>
-  <!-- PESTAÑA 1: VENDEDORES -->
+
+  <!-- PESTAÑA 1: VENDEDORES (semestral) -->
   <div class="pane on" id="pane1">
     <div class="card">
-      <div class="chead"><div class="t"><small>Lectura 1 · operación comercial del mes</small>Ventas globales por vendedor</div></div>
-      <table>
-        <thead><tr><th>Vendedor</th><th class="r">Venta del mes</th><th class="r">% del total</th></tr></thead>
-        <tbody id="vendBody"></tbody>
-        <tfoot><tr><td>Total del mes</td><td class="r" id="vendTotal">$0</td><td class="r">100%</td></tr></tfoot>
-      </table>
+      <div class="chead"><div class="t"><small>Lectura 1 · operación comercial del semestre</small>Ventas por vendedor · 6 meses</div></div>
+      <div class="semwrap"><table class="semtable" id="vendTable"></table></div>
     </div>
     <div class="actions"><button class="act" id="saveVendBtn">Guardar ventas</button></div>
-    <p class="note">Ventas totales de Recouromex (LC + RC) por vendedor. Es seguimiento de operación, sin meta.</p>
+    <p class="note">Cada celda es la venta del vendedor en ese mes. "Total sem." suma los 6 meses. La fila TOTAL suma por mes y el total del semestre.</p>
   </div>
-  <!-- PESTAÑA 2: MARCAS -->
+
+  <!-- PESTAÑA 2: MARCAS (semestral) -->
   <div class="pane" id="pane2">
-    <div class="card">
-      <div class="chead"><div class="t"><small>Lectura 2 · cumplimiento de objetivo por marca</small>Ventas por marca vs. meta</div></div>
-      <table>
-        <thead><tr>
-          <th>Marca</th><th class="r">Venta real</th><th class="r">Mismo mes año ant.</th>
-          <th class="r">Meta del mes</th><th class="c">Cumplimiento</th><th class="c">Interanual</th>
-        </tr></thead>
-        <tbody id="marcaBody"></tbody>
-      </table>
-    </div>
+    <div id="marcaCards"></div>
     <div class="actions"><button class="act" id="saveMarcaBtn">Guardar</button></div>
-    <p class="note" id="metaNote">Cumplimiento = venta real ÷ meta. Verde ≥100% · ámbar 80–99% · rojo &lt;80% · gris si no hay meta.</p>
+    <p class="note" id="metaNote">Solo GLOBAL tiene meta (cumplimiento con semáforo). LC y BR solo comparativo interanual. El total del semestre y su semáforo/comparativo salen de la suma de los 6 meses.</p>
   </div>
 </div>
+
 <script>
 /* =====================================================================
-   CONFIG
+   ███  CONFIG — EDITA SOLO ESTE BLOQUE  ███
+   Rodrigo pega la URL y la ANON key del proyecto. NO uses service_role.
    ===================================================================== */
 const CONFIG = {
-  SUPABASE_URL:      "https://qcwpnovwyhzhqqmhjxco.supabase.co",
-  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjd3Bub3Z3eWh6aHFxbWhqeGNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDA3OTUsImV4cCI6MjA5NTI3Njc5NX0.-MSnn07PdxstQ90OLf16823Nvihr47ePXoQSFvgC3mU",
-  PERIODO:           ""
+  SUPABASE_URL:      "PEGAR_AQUI_LA_URL_DE_SUPABASE",   // ej: https://qcwpnovwyhzhqqmhjxco.supabase.co
+  SUPABASE_ANON_KEY: "PEGAR_AQUI_LA_ANON_KEY"           // la llave pública (anon)
 };
 /* ===================================================================== */
+
 let db=null;
 const SESSION={pin:null,evalId:null,evalNombre:null,evalRol:null};
-let PERIODO = CONFIG.PERIODO || (()=>{ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); })();
+const ANIO=2026;
+let SEMESTRE=( (new Date().getMonth()+1) <= 6 ) ? 1 : 2;
 let dirty=false, syncTimer=null;
 const cfgOK = CONFIG.SUPABASE_URL && !CONFIG.SUPABASE_URL.startsWith("PEGAR")
            && CONFIG.SUPABASE_ANON_KEY && !CONFIG.SUPABASE_ANON_KEY.startsWith("PEGAR");
-let VEND=[];
-let MARCAS=[];
-const MES_NOMBRE=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-function periodoLabel(per){ const p=String(per).split('-'); return (MES_NOMBRE[parseInt(p[1],10)-1]||per)+' '+p[0]; }
-function money(v){ if(v==null||v==='') return '—'; const n=Number(v); if(isNaN(n)) return '—'; return '$'+n.toLocaleString('es-MX',{maximumFractionDigits:0}); }
+
+const MES_CORTO=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+function semMeses(){ return SEMESTRE===1 ? [1,2,3,4,5,6] : [7,8,9,10,11,12]; }
+function per(m){ return ANIO+'-'+String(m).padStart(2,'0'); }
+function semLabel(){ return (SEMESTRE===1?'1er':'2do')+' Semestre '+ANIO; }
+
+let VEND=[];    // {id,nombre, m:{mes:monto}}
+let MARCAS=[];  // {id,nombre,hasMeta, real:{mes:v}, prev:{mes:v}, meta:{mes:v}}
+let changedV=new Set();   // "vendedorId|mes"
+let changedM=new Set();   // "marcaId|fld|mes"
+
+function money(v){ const n=Number(v||0); return '$'+(isNaN(n)?0:n).toLocaleString('es-MX',{maximumFractionDigits:0}); }
 function num(v){ return (v===''||v==null)? null : (isNaN(parseFloat(v))? null : parseFloat(v)); }
 function toast(msg,kind){ const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show'+(kind?(' '+kind):''); clearTimeout(t._h); t._h=setTimeout(()=>{t.className='toast';},3800); }
 function markDirty(){ dirty=true; document.getElementById('syncState').innerHTML='cambios sin guardar · sincronización en pausa'; }
@@ -163,129 +174,160 @@ function showTab(n){
   document.getElementById('pane1').classList.toggle('on',n===1);
   document.getElementById('pane2').classList.toggle('on',n===2);
 }
-/* ---- RENDER ---- */
+function semChip(real,meta){ if(!(meta>0)||real==null) return '<span class="sem none">—</span>'; const c=Math.round(real/meta*100); const cls=c>=100?'ok':(c>=80?'warn':'bad'); return '<span class="sem '+cls+'">'+c+'%</span>'; }
+function yoyChip(real,prev){ if(!(prev>0)||real==null) return '<span class="yoy flat">—</span>'; const d=Math.round((real-prev)/prev*100); const cls=d>0?'up':(d<0?'down':'flat'); const ar=d>0?'▲':(d<0?'▼':'■'); return '<span class="yoy '+cls+'">'+ar+' '+(d>0?'+':'')+d+'%</span>'; }
+
+/* ---- RENDER tab 1 (vendedores) — construye una vez ---- */
 function renderVend(){
-  const tb=document.getElementById('vendBody'); tb.innerHTML='';
-  const total=VEND.reduce((s,v)=>s+(v.monto||0),0);
-  VEND.forEach((v,i)=>{
-    const pct = total>0 && v.monto!=null ? (v.monto/total*100).toFixed(2) : '0.00';
-    const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td><span class="nm">${v.nombre}</span></td>
-      <td class="r"><input class="money-in" type="number" min="0" step="any" data-vi="${i}" value="${v.monto??''}" placeholder="0"></td>
-      <td class="r"><span class="pct">${total>0?pct+'%':'—'}</span></td>`;
-    tb.appendChild(tr);
-  });
-  document.getElementById('vendTotal').textContent=money(total);
+  const meses=semMeses();
+  const th=`<tr><th>Vendedor</th>${meses.map(m=>`<th class="r">${MES_CORTO[m-1]}</th>`).join('')}<th class="r">Total sem.</th></tr>`;
+  const body=VEND.map((v,vi)=>{
+    const cells=meses.map(m=>`<td class="r"><input class="cell-money" type="number" min="0" step="any" data-vi="${vi}" data-m="${m}" value="${v.m[m]??''}" placeholder="0"></td>`).join('');
+    return `<tr><td><span class="nm">${v.nombre}</span></td>${cells}<td class="r vrowtot" data-vi="${vi}">$0</td></tr>`;
+  }).join('');
+  const tot=`<tr class="totrow"><td>TOTAL</td>${meses.map(m=>`<td class="r vcoltot" data-m="${m}">$0</td>`).join('')}<td class="r vgrand">$0</td></tr>`;
+  document.getElementById('vendTable').innerHTML=`<thead>${th}</thead><tbody>${body}</tbody><tfoot>${tot}</tfoot>`;
+  recalcVend();
 }
+function recalcVend(){
+  const meses=semMeses(); const col={}; meses.forEach(m=>col[m]=0); let grand=0;
+  VEND.forEach((v,vi)=>{ let rt=0; meses.forEach(m=>{ const x=Number(v.m[m]||0); rt+=x; col[m]+=x; }); grand+=rt;
+    const c=document.querySelector(`.vrowtot[data-vi="${vi}"]`); if(c) c.textContent=money(rt); });
+  meses.forEach(m=>{ const c=document.querySelector(`.vcoltot[data-m="${m}"]`); if(c) c.textContent=money(col[m]); });
+  const g=document.querySelector('.vgrand'); if(g) g.textContent=money(grand);
+}
+
+/* ---- RENDER tab 2 (marcas) — construye una vez ---- */
 function renderMarca(){
-  const tb=document.getElementById('marcaBody'); tb.innerHTML='';
-  const esDir = SESSION.evalId==='direccion';
-  MARCAS.forEach((m,i)=>{
-    const real=m.venta_real, prev=m.venta_anio_anterior, meta=m.meta;
-    let sem='<span class="sem none">—</span>';
-    if(m.hasMeta){
-      if(meta && meta>0 && real!=null){
-        const c=Math.round(real/meta*100);
-        const cls = c>=100?'ok':(c>=80?'warn':'bad');
-        sem='<span class="sem '+cls+'">'+c+'% de meta</span>';
-      } else { sem='<span class="sem none">sin meta</span>'; }
+  const meses=semMeses(); const esDir=SESSION.evalId==='direccion';
+  const html=MARCAS.map((mk,mi)=>{
+    const head=`<tr><th>${mk.nombre}</th>${meses.map(m=>`<th class="r">${MES_CORTO[m-1]}</th>`).join('')}<th class="r">Total sem.</th></tr>`;
+    let rows=`<tr><td class="rowlbl">Venta real</td>${meses.map(m=>`<td class="r"><input class="cell-money" type="number" min="0" step="any" data-mi="${mi}" data-fld="real" data-m="${m}" value="${mk.real[m]??''}" placeholder="0"></td>`).join('')}<td class="r realtot" data-mi="${mi}">$0</td></tr>`;
+    if(mk.hasMeta){
+      rows+=`<tr><td class="rowlbl">Meta</td>${meses.map(m=>{ const v=mk.meta[m]; return esDir ? `<td class="r"><input class="cell-money" type="number" min="0" step="any" data-mi="${mi}" data-fld="meta" data-m="${m}" value="${v??''}" placeholder="0"></td>` : `<td class="r"><span class="ro">${v&&v>0?money(v):'—'}</span></td>`; }).join('')}<td class="r metatot" data-mi="${mi}">$0</td></tr>`;
+      rows+=`<tr><td class="rowlbl">Cumpl. %</td>${meses.map(m=>`<td class="c cumpl" data-mi="${mi}" data-m="${m}"></td>`).join('')}<td class="c cumpltot" data-mi="${mi}"></td></tr>`;
     }
-    let yoy='<span class="yoy flat">—</span>';
-    if(prev && prev>0 && real!=null){
-      const d=Math.round((real-prev)/prev*100);
-      const cls=d>0?'up':(d<0?'down':'flat');
-      const arrow=d>0?'▲':(d<0?'▼':'■');
-      yoy='<span class="yoy '+cls+'">'+arrow+' '+(d>0?'+':'')+d+'%</span>';
-    }
-    let metaCell;
-    if(!m.hasMeta) metaCell='<span class="meta-ro" style="color:var(--muted)">—</span>';
-    else if(esDir) metaCell='<input class="money-in" type="number" min="0" step="any" data-mmeta="'+i+'" value="'+(meta??'')+'" placeholder="0">';
-    else metaCell='<span class="meta-ro">'+(meta&&meta>0?money(meta):'—')+'</span>';
-    const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td><span class="nm">${m.nombre}</span></td>
-      <td class="r"><input class="money-in" type="number" min="0" step="any" data-mreal="${i}" value="${real??''}" placeholder="0"></td>
-      <td class="r"><input class="money-in" type="number" min="0" step="any" data-mprev="${i}" value="${prev??''}" placeholder="0"></td>
-      <td class="r">${metaCell}</td>
-      <td class="c">${sem}</td>
-      <td class="c">${yoy}</td>`;
-    tb.appendChild(tr);
-  });
+    rows+=`<tr><td class="rowlbl">Año ant.</td>${meses.map(m=>`<td class="r"><input class="cell-money" type="number" min="0" step="any" data-mi="${mi}" data-fld="prev" data-m="${m}" value="${mk.prev[m]??''}" placeholder="0"></td>`).join('')}<td class="r prevtot" data-mi="${mi}">$0</td></tr>`;
+    rows+=`<tr><td class="rowlbl">Interanual</td>${meses.map(m=>`<td class="c yoy2" data-mi="${mi}" data-m="${m}"></td>`).join('')}<td class="c yoytot" data-mi="${mi}"></td></tr>`;
+    const sub=mk.hasMeta?'Con meta · cumplimiento + interanual':'Comparativo interanual (sin meta)';
+    return `<div class="card"><div class="chead"><div class="t"><small>${sub}</small>${mk.nombre}</div></div><div class="semwrap"><table class="semtable"><thead>${head}</thead><tbody>${rows}</tbody></table></div></div>`;
+  }).join('');
+  document.getElementById('marcaCards').innerHTML=html;
   document.getElementById('metaNote').innerHTML = esDir
-    ? 'Solo <b>GLOBAL</b> tiene meta (cambia cada mes). Verde ≥100% · ámbar 80–99% · rojo &lt;80%. LC y BR solo comparan contra el mismo mes del año anterior. <b>Puedes editar la meta GLOBAL del mes</b> (se guarda al dar Guardar).'
-    : 'Solo <b>GLOBAL</b> tiene meta (cambia cada mes). Verde ≥100% · ámbar 80–99% · rojo &lt;80%. LC y BR solo comparan contra el mismo mes del año anterior. La meta solo la edita Dirección.';
+    ? 'Solo GLOBAL tiene meta (cumplimiento con semáforo). LC y BR solo comparativo interanual. <b>Puedes editar la meta GLOBAL</b> de cada mes. El total del semestre y su semáforo salen de la suma de los 6 meses.'
+    : 'Solo GLOBAL tiene meta (cumplimiento con semáforo). LC y BR solo comparativo interanual. La meta solo la edita Dirección. El total del semestre y su semáforo salen de la suma de los 6 meses.';
+  recalcMarca();
 }
-/* ---- eventos de captura ---- */
+function recalcMarca(){
+  const meses=semMeses();
+  const setT=(sel,txt)=>{ const e=document.querySelector(sel); if(e) e.textContent=txt; };
+  const setH=(sel,html)=>{ const e=document.querySelector(sel); if(e) e.innerHTML=html; };
+  MARCAS.forEach((mk,mi)=>{
+    let rt=0,pt=0,mt=0; meses.forEach(m=>{ rt+=Number(mk.real[m]||0); pt+=Number(mk.prev[m]||0); if(mk.hasMeta) mt+=Number(mk.meta[m]||0); });
+    setT(`.realtot[data-mi="${mi}"]`, money(rt));
+    setT(`.prevtot[data-mi="${mi}"]`, money(pt));
+    if(mk.hasMeta){
+      setT(`.metatot[data-mi="${mi}"]`, money(mt));
+      meses.forEach(m=>setH(`.cumpl[data-mi="${mi}"][data-m="${m}"]`, semChip(mk.real[m]!=null?Number(mk.real[m]):null, Number(mk.meta[m]||0))));
+      setH(`.cumpltot[data-mi="${mi}"]`, semChip(rt, mt));
+    }
+    meses.forEach(m=>setH(`.yoy2[data-mi="${mi}"][data-m="${m}"]`, yoyChip(mk.real[m]!=null?Number(mk.real[m]):null, Number(mk.prev[m]||0))));
+    setH(`.yoytot[data-mi="${mi}"]`, yoyChip(rt, pt));
+  });
+}
+
+/* ---- captura: actualiza datos + recálculo EN SITIO (sin perder foco) ---- */
 document.addEventListener('input', e=>{
   const t=e.target; if(!t.dataset) return;
-  if(t.dataset.vi!==undefined){ VEND[+t.dataset.vi].monto=num(t.value); markDirty(); renderVend(); }
-  else if(t.dataset.mreal!==undefined){ MARCAS[+t.dataset.mreal].venta_real=num(t.value); markDirty(); renderMarca(); }
-  else if(t.dataset.mprev!==undefined){ MARCAS[+t.dataset.mprev].venta_anio_anterior=num(t.value); markDirty(); renderMarca(); }
-  else if(t.dataset.mmeta!==undefined){ MARCAS[+t.dataset.mmeta].meta=num(t.value); markDirty(); renderMarca(); }
+  if(t.dataset.vi!==undefined && t.dataset.m!==undefined){
+    const vi=+t.dataset.vi, m=+t.dataset.m; VEND[vi].m[m]=num(t.value); changedV.add(VEND[vi].id+'|'+m); markDirty(); recalcVend();
+  } else if(t.dataset.mi!==undefined && t.dataset.fld!==undefined){
+    const mi=+t.dataset.mi, m=+t.dataset.m, fld=t.dataset.fld;
+    MARCAS[mi][fld][m]=num(t.value); changedM.add(MARCAS[mi].id+'|'+fld+'|'+m); markDirty(); recalcMarca();
+  }
 });
+
 /* =====================================================================
-   CAPA DE DATOS
+   CAPA DE DATOS (lee los 6 meses del semestre)
    ===================================================================== */
 async function load(){
   if(!db) return;
+  const meses=semMeses(); const pers=meses.map(per);
   try{
-    const {mes,anio}=periodoMesAnio();
     const [vRes,mRes,vvRes,vmRes,mmRes]=await Promise.all([
       db.from('vta_vendedores').select('id,nombre,orden,activo').eq('activo',true).order('orden'),
       db.from('vta_marcas').select('id,nombre,orden,activo').eq('activo',true).order('orden'),
-      db.from('vta_ventas_vendedor').select('vendedor_id,monto').eq('periodo',PERIODO),
-      db.from('vta_ventas_marca').select('marca_id,venta_real,venta_anio_anterior').eq('periodo',PERIODO),
-      db.from('vta_metas_mensuales').select('marca_id,meta').eq('mes',mes).eq('anio',anio)
+      db.from('vta_ventas_vendedor').select('vendedor_id,periodo,monto').in('periodo',pers),
+      db.from('vta_ventas_marca').select('marca_id,periodo,venta_real,venta_anio_anterior').in('periodo',pers),
+      db.from('vta_metas_mensuales').select('mes,meta').eq('marca_id','global').eq('anio',ANIO).in('mes',meses)
     ]);
     for(const r of [vRes,mRes,vvRes,vmRes,mmRes]) if(r.error) throw r.error;
-    const vv={}; (vvRes.data||[]).forEach(r=>vv[r.vendedor_id]=r);
-    const vm={}; (vmRes.data||[]).forEach(r=>vm[r.marca_id]=r);
-    const mm={}; (mmRes.data||[]).forEach(r=>mm[r.marca_id]=r.meta);
-    VEND=(vRes.data||[]).map(v=>({id:v.id,nombre:v.nombre, monto:(vv[v.id]? (vv[v.id].monto??null):null)}));
-    MARCAS=(mRes.data||[]).map(m=>{ const c=vm[m.id]||{}; const tieneMeta=Object.prototype.hasOwnProperty.call(mm,m.id); return {id:m.id,nombre:m.nombre,
-      hasMeta:tieneMeta, meta:(tieneMeta?(mm[m.id]??0):null), _metaOrig:(tieneMeta?(mm[m.id]??0):null),
-      venta_real:(c.venta_real??null), venta_anio_anterior:(c.venta_anio_anterior??null)}; });
-    dirty=false;
+    const vmap={}; (vvRes.data||[]).forEach(r=>{ const mm=parseInt(r.periodo.split('-')[1],10); (vmap[r.vendedor_id]=vmap[r.vendedor_id]||{})[mm]=r.monto; });
+    const realMap={}, prevMap={}; (vmRes.data||[]).forEach(r=>{ const mm=parseInt(r.periodo.split('-')[1],10);
+      (realMap[r.marca_id]=realMap[r.marca_id]||{})[mm]=r.venta_real; (prevMap[r.marca_id]=prevMap[r.marca_id]||{})[mm]=r.venta_anio_anterior; });
+    const metaMap={}; (mmRes.data||[]).forEach(r=>{ metaMap[r.mes]=r.meta; });
+
+    VEND=(vRes.data||[]).map(v=>({id:v.id,nombre:v.nombre, m:Object.assign({},vmap[v.id]||{})}));
+    MARCAS=(mRes.data||[]).map(mk=>{
+      const hasMeta=(mk.id==='global'); const meta={};
+      if(hasMeta) meses.forEach(m=>{ meta[m]=(metaMap[m]!=null?metaMap[m]:null); });
+      return {id:mk.id,nombre:mk.nombre,hasMeta, real:Object.assign({},realMap[mk.id]||{}), prev:Object.assign({},prevMap[mk.id]||{}), meta};
+    });
+    changedV.clear(); changedM.clear(); dirty=false;
     renderVend(); renderMarca();
     document.getElementById('syncState').textContent='actualizado';
   }catch(err){ console.error(err); toast('Error al cargar: '+(err.message||err),'err'); }
 }
+
 async function saveVendedores(){
   if(!db||!SESSION.pin){ toast('Inicia sesión con tu PIN','err'); return; }
+  if(changedV.size===0){ toast('No hay cambios por guardar','ok'); return; }
   const btn=document.getElementById('saveVendBtn'); const o=btn.textContent; btn.disabled=true; btn.textContent='Guardando…';
   let ok=0,err=0;
   try{
-    for(const v of VEND){
-      const { error }=await db.rpc('vta_upsert_vendedor',{p_pin:SESSION.pin,p_vendedor:v.id,p_periodo:PERIODO,p_monto:v.monto});
-      if(error){err++;console.error(v.id,error);} else ok++;
+    for(const key of Array.from(changedV)){
+      const parts=key.split('|'); const vid=parts[0], m=parseInt(parts[1],10);
+      const v=VEND.find(x=>x.id===vid); if(!v) continue;
+      const { error }=await db.rpc('vta_upsert_vendedor',{p_pin:SESSION.pin,p_vendedor:vid,p_periodo:per(m),p_monto:(v.m[m]??null)});
+      if(error){err++;console.error(vid,m,error);} else { ok++; changedV.delete(key); }
     }
     dirty=false;
-    if(err===0){ toast('Ventas guardadas · '+ok+' vendedores ✓','ok'); document.getElementById('syncState').textContent='guardado'; }
+    if(err===0){ toast('Ventas guardadas · '+ok+' celdas ✓','ok'); document.getElementById('syncState').textContent='guardado'; }
     else toast('Guardado parcial: '+ok+' ok, '+err+' con error','err');
   }finally{ btn.disabled=false; btn.textContent=o; }
 }
+
 async function saveMarcas(){
   if(!db||!SESSION.pin){ toast('Inicia sesión con tu PIN','err'); return; }
+  if(changedM.size===0){ toast('No hay cambios por guardar','ok'); return; }
   const esDir=SESSION.evalId==='direccion';
-  const {mes,anio}=periodoMesAnio();
   const btn=document.getElementById('saveMarcaBtn'); const o=btn.textContent; btn.disabled=true; btn.textContent='Guardando…';
+  // dedupe: ventas (real/prev) por (marca,mes); metas por (marca,mes)
+  const ventaCells=new Set(); const metaCells=[];
+  Array.from(changedM).forEach(key=>{ const p=key.split('|'); const mid=p[0], fld=p[1], m=p[2];
+    if(fld==='real'||fld==='prev') ventaCells.add(mid+'|'+m); else if(fld==='meta') metaCells.push([mid,m]); });
   let ok=0,err=0,metas=0;
   try{
-    for(const m of MARCAS){
-      const { error }=await db.rpc('vta_upsert_marca',{p_pin:SESSION.pin,p_marca:m.id,p_periodo:PERIODO,p_venta_real:m.venta_real,p_venta_anio_anterior:m.venta_anio_anterior});
-      if(error){err++;console.error(m.id,error);} else ok++;
-      if(esDir && m.hasMeta && (m.meta??0)!==(m._metaOrig??0)){
-        const r=await db.rpc('vta_set_meta_mensual',{p_pin:SESSION.pin,p_marca:m.id,p_mes:mes,p_anio:anio,p_meta:(m.meta??0)});
-        if(!r.error){ metas++; m._metaOrig=m.meta; } else console.error('meta',m.id,r.error);
+    for(const cell of Array.from(ventaCells)){
+      const p=cell.split('|'); const mid=p[0], m=parseInt(p[1],10);
+      const mk=MARCAS.find(x=>x.id===mid); if(!mk) continue;
+      const { error }=await db.rpc('vta_upsert_marca',{p_pin:SESSION.pin,p_marca:mid,p_periodo:per(m),p_venta_real:(mk.real[m]??null),p_venta_anio_anterior:(mk.prev[m]??null)});
+      if(error){err++;console.error(mid,m,error);} else ok++;
+    }
+    if(esDir){
+      for(const mm of metaCells){
+        const mid=mm[0], m=parseInt(mm[1],10); const mk=MARCAS.find(x=>x.id===mid); if(!mk) continue;
+        const r=await db.rpc('vta_set_meta_mensual',{p_pin:SESSION.pin,p_marca:mid,p_mes:m,p_anio:ANIO,p_meta:(mk.meta[m]??0)});
+        if(!r.error){ metas++; } else { err++; console.error('meta',mid,m,r.error); }
       }
     }
-    dirty=false;
-    if(err===0){ toast('Guardado ✓ · '+ok+' marcas'+(metas?(' · '+metas+' metas'):''),'ok'); document.getElementById('syncState').textContent='guardado'; }
+    if(err===0){ changedM.clear(); dirty=false; toast('Guardado ✓ · '+ok+' ventas'+(metas?(' · '+metas+' metas'):''),'ok'); document.getElementById('syncState').textContent='guardado'; }
     else toast('Guardado parcial: '+ok+' ok, '+err+' con error','err');
   }finally{ btn.disabled=false; btn.textContent=o; }
 }
+
 function startSync(){ if(syncTimer) clearInterval(syncTimer); syncTimer=setInterval(()=>{ if(dirty) return; load(); },30000); }
+
 async function doLogin(){
   const msg=document.getElementById('loginMsg');
   const pin=document.getElementById('pinInput').value.trim();
@@ -301,23 +343,18 @@ async function doLogin(){
     SESSION.evalNombre=ev.data?ev.data.nombre:data; SESSION.evalRol=ev.data?ev.data.rol:'';
     document.getElementById('sessUser').textContent=SESSION.evalNombre;
     const pill=document.getElementById('sessPill'); pill.className='pill on'; pill.textContent=SESSION.evalRol||'en sesión';
-    document.getElementById('sessPeriodo').textContent=PERIODO;
+    document.getElementById('sessPeriodo').textContent=semLabel();
     document.getElementById('loginOverlay').classList.add('hidden');
     await load(); startSync();
     toast('Bienvenido(a), '+SESSION.evalNombre,'ok');
   }catch(err){ console.error(err); msg.className='msg err'; msg.textContent='Error al validar PIN: '+(err.message||err); }
 }
-function periodoMesAnio(){ const p=String(PERIODO).split('-'); return {anio:parseInt(p[0],10), mes:parseInt(p[1],10)}; }
-function fillPeriodSelect(){
-  const sel=document.getElementById('periodSel'); if(!sel) return; sel.innerHTML='';
-  const anio=2026;
-  for(let m=1;m<=12;m++){ const val=anio+'-'+String(m).padStart(2,'0'); const o=document.createElement('option'); o.value=val; o.textContent=MES_NOMBRE[m-1]+' '+anio; sel.appendChild(o); }
-  if([...sel.options].some(o=>o.value===PERIODO)) sel.value=PERIODO; else { sel.value=anio+'-'+String(new Date().getMonth()+1).padStart(2,'0'); PERIODO=sel.value; }
-  sel.addEventListener('change',e=>{ PERIODO=e.target.value; document.getElementById('sessPeriodo').textContent=PERIODO; if(db&&SESSION.pin) load(); });
-}
+
 function init(){
-  fillPeriodSelect();
-  document.getElementById('sessPeriodo').textContent=PERIODO;
+  const sem=document.getElementById('semSel');
+  sem.value=String(SEMESTRE);
+  document.getElementById('sessPeriodo').textContent=semLabel();
+  sem.addEventListener('change',e=>{ SEMESTRE=parseInt(e.target.value,10); document.getElementById('sessPeriodo').textContent=semLabel(); if(db&&SESSION.pin) load(); });
   renderVend(); renderMarca();
   const msg=document.getElementById('loginMsg');
   if(!cfgOK){
