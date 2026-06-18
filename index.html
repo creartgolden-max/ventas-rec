@@ -76,6 +76,9 @@
   .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(80px);background:var(--navy-deep);color:#fff;font-family:Arial,sans-serif;font-size:13px;padding:13px 22px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:.25s;z-index:1100;max-width:90vw;text-align:center}
   .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
   .toast.err{background:var(--bad)} .toast.ok{background:var(--ok)}
+  .logout-btn{position:fixed;top:12px;right:14px;z-index:900;font-family:Arial,sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.92);color:var(--muted);padding:6px 12px;border-radius:8px;display:none}
+  .logout-btn.show{display:block}
+  .logout-btn:hover{color:var(--bad);border-color:var(--bad)}
 </style>
 </head>
 <body>
@@ -91,6 +94,7 @@
   </div>
 </div>
 <div id="toast" class="toast"></div>
+<button class="logout-btn" id="logoutBtn" onclick="cerrarSesion()">Cerrar sesión</button>
 
 <div class="topbar">
   <div>
@@ -141,8 +145,8 @@
    Rodrigo pega la URL y la ANON key del proyecto. NO uses service_role.
    ===================================================================== */
 const CONFIG = {
-  SUPABASE_URL:      "https://qcwpnovwyhzhqqmhjxco.supabase.co",   // ej: https://qcwpnovwyhzhqqmhjxco.supabase.co
-  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjd3Bub3Z3eWh6aHFxbWhqeGNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3MDA3OTUsImV4cCI6MjA5NTI3Njc5NX0.-MSnn07PdxstQ90OLf16823Nvihr47ePXoQSFvgC3mU"           // la llave pública (anon)
+  SUPABASE_URL:      "PEGAR_AQUI_LA_URL_DE_SUPABASE",   // ej: https://qcwpnovwyhzhqqmhjxco.supabase.co
+  SUPABASE_ANON_KEY: "PEGAR_AQUI_LA_ANON_KEY"           // la llave pública (anon)
 };
 /* ===================================================================== */
 
@@ -328,6 +332,19 @@ async function saveMarcas(){
 
 function startSync(){ if(syncTimer) clearInterval(syncTimer); syncTimer=setInterval(()=>{ if(dirty) return; load(); },30000); }
 
+function cerrarSesion(){
+  SESSION.pin=null; SESSION.evalId=null; SESSION.evalNombre=null; SESSION.evalRol=null;
+  if(syncTimer){ clearInterval(syncTimer); syncTimer=null; }
+  dirty=false;
+  const lb=document.getElementById('logoutBtn'); if(lb) lb.classList.remove('show');
+  const su=document.getElementById('sessUser'); if(su) su.textContent='—';
+  const sp=document.getElementById('sessPill'); if(sp){ sp.className='pill off'; sp.textContent='sin sesión'; }
+  const ss=document.getElementById('syncState'); if(ss) ss.textContent='sesión cerrada';
+  const pin=document.getElementById('pinInput'); if(pin) pin.value='';
+  const msg=document.getElementById('loginMsg'); if(msg){ msg.className='msg info'; msg.textContent='Ingresa tu PIN.'; }
+  document.getElementById('loginOverlay').classList.remove('hidden');
+  if(pin) pin.focus();
+}
 async function doLogin(){
   const msg=document.getElementById('loginMsg');
   const pin=document.getElementById('pinInput').value.trim();
@@ -345,6 +362,7 @@ async function doLogin(){
     const pill=document.getElementById('sessPill'); pill.className='pill on'; pill.textContent=SESSION.evalRol||'en sesión';
     document.getElementById('sessPeriodo').textContent=semLabel();
     document.getElementById('loginOverlay').classList.add('hidden');
+    document.getElementById('logoutBtn').classList.add('show');
     await load(); startSync();
     toast('Bienvenido(a), '+SESSION.evalNombre,'ok');
   }catch(err){ console.error(err); msg.className='msg err'; msg.textContent='Error al validar PIN: '+(err.message||err); }
